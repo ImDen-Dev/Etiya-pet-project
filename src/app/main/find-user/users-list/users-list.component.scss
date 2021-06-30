@@ -3,5 +3,9 @@ table {
     tr[tableCollapseDirective] {
       cursor: pointer;
     }
+    input {
+      width: 100%;
+      max-width: 120px;
+    }
   }
 }

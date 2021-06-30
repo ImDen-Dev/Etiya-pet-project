@@ -23,6 +23,16 @@ export class UserService {
       });
   }
 
+  deleteUser(id: number) {
+    return this.http.delete(`http://localhost:3000/users/${id}`);
+  }
+
+  deleteUserAddress(id: number, addressIndex: number) {
+    return this.http.delete(
+      `http://localhost:3000/users/${id}/userAddress/${addressIndex}`
+    );
+  }
+
   filterUsers(value: any, response: any[]): UserInfoModel[] {
     Object.keys(value).forEach((key) => {
       if (value[key] === null) {

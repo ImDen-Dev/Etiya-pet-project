@@ -1,76 +1,131 @@
 <div class="container">
   <div class="" *ngIf="users.length > 0">
-    <table class="table table-striped user-select-none">
-      <thead>
-        <tr>
-          <th scope="col">First Name</th>
-          <th scope="col">Last Name</th>
-          <th scope="col">User Name</th>
-          <th scope="col">Email</th>
-          <th scope="col">Phone</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-template ngFor let-user [ngForOf]="users">
-          <tr style="vertical-align: middle" tableCollapseDirective>
-            <td>{{ user.firstName }}</td>
-            <td>{{ user.lastName }}</td>
-            <td>{{ user.userName }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.phone }}</td>
-            <td>
-              <button type="button" class="btn btn-outline-success me-2">
-                Update
-              </button>
-              <button type="button" class="btn btn-danger">Delete</button>
-            </td>
+    <form [formGroup]="forms">
+      <table class="table table-striped user-select-none">
+        <thead>
+          <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">User Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Actions</th>
           </tr>
-          <tr class="collapse">
-            <td colspan="6">
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">Address Type</th>
-                    <th scope="col">Country</th>
-                    <th scope="col">City</th>
-                    <th scope="col">Postal Code</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    style="vertical-align: middle"
-                    *ngFor="let address of user.userAddress"
-                  >
-                    <td>{{ address.addressType }}</td>
-                    <td>{{ address.country }}</td>
-                    <td>{{ address.city }}</td>
-                    <td>{{ address.postalCode }}</td>
-                    <td>{{ address.address }}</td>
-                    <td>
-                      <button
-                        type="button"
-                        class="btn btn-outline-success me-2"
-                      >
-                        Update
-                      </button>
-                      <button type="button" class="btn btn-danger me-2">
-                        Delete
-                      </button>
-                      <button type="button" class="btn btn-primary">
-                        Add new
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-        </ng-template>
-      </tbody>
-    </table>
+        </thead>
+        <tbody formArrayName="foundUsers">
+          <ng-container
+            *ngFor="let user of getFoundUsers.controls; let i = index"
+          >
+            <tr
+              [formGroupName]="i"
+              style="vertical-align: middle"
+              tableCollapseDirective
+            >
+              <ng-container *ngIf="isEdit === i">
+                <td><input type="text" formControlName="firstName" /></td>
+                <td><input type="text" formControlName="lastName" /></td>
+                <td><input type="text" formControlName="userName" /></td>
+                <td><input type="text" formControlName="email" /></td>
+                <td><input type="text" formControlName="phone" /></td>
+              </ng-container>
+              <ng-container *ngIf="isEdit !== i">
+                <td>{{ user.value.firstName }}</td>
+                <td>{{ user.value.lastName }}</td>
+                <td>{{ user.value.userName }}</td>
+                <td>{{ user.value.email }}</td>
+                <td>{{ user.value.phone }}</td>
+              </ng-container>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-outline-success me-2"
+                  (click)="onUpdate(i)"
+                >
+                  Update
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  (click)="onDelete(user.value.id, i)"
+                >
+                  Delete {{ user.value.id }}
+                </button>
+              </td>
+            </tr>
+            <tr class="collapse" [formGroupName]="i">
+              <td colspan="6">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Address Type</th>
+                      <th scope="col">Country</th>
+                      <th scope="col">City</th>
+                      <th scope="col">Postal Code</th>
+                      <th scope="col">Address</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody formArrayName="userAddresses">
+                    <ng-container
+                      *ngFor="
+                        let address of getUserAddresses(i).controls;
+                        let j = index
+                      "
+                    >
+                      <tr [formGroupName]="j" style="vertical-align: middle">
+                        <ng-container *ngIf="isEdit !== i + j">
+                          <td>
+                            {{ address.value.addressType }}
+                          </td>
+                          <td>{{ address.value.country }}</td>
+                          <td>{{ address.value.city }}</td>
+                          <td>{{ address.value.postalCode }}</td>
+                          <td>{{ address.value.address }}</td>
+                        </ng-container>
+                        <ng-container *ngIf="isEdit === i + j">
+                          <td>
+                            <input type="text" formControlName="addressType" />
+                          </td>
+                          <td>
+                            <input type="text" formControlName="country" />
+                          </td>
+                          <td><input type="text" formControlName="city" /></td>
+                          <td>
+                            <input type="text" formControlName="postalCode" />
+                          </td>
+                          <td>
+                            <input type="text" formControlName="address" />
+                          </td>
+                        </ng-container>
+                        <td>
+                          <button
+                            type="button"
+                            class="btn btn-outline-success me-2"
+                            (click)="onUpdate(i + j)"
+                          >
+                            Update
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-danger me-2"
+                            (click)="onDelete(user.value.id, i, j)"
+                          >
+                            Delete
+                          </button>
+                          <button type="button" class="btn btn-primary">
+                            Add new
+                          </button>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </form>
   </div>
   <div class="text-center" *ngIf="users.length <= 0">Users not found yet</div>
 </div>
