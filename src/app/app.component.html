@@ -1,0 +1,12 @@
+<div class="wrapper d-flex flex-column min-vh-100 justify-content-between">
+  <app-header></app-header>
+  <div class="main h-100 d-flex flex-row flex-fill">
+    <app-sidebar></app-sidebar>
+    <main class="flex-fill py-3">
+      <div class="container">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+  <app-footer></app-footer>
+</div>

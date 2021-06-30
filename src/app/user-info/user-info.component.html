@@ -1,0 +1,55 @@
+<div>
+  <h2 class="text-center">User info</h2>
+  <hr />
+  <div class="card">
+    <h3 class="card-header">
+      {{ userInfo?.firstName }} {{ userInfo?.lastName }}
+    </h3>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <h5 class="card-title">First Name</h5>
+        <p class="card-text">{{ userInfo?.firstName }}</p>
+      </li>
+      <li class="list-group-item">
+        <h5 class="card-title">Last Name</h5>
+        <p class="card-text">{{ userInfo?.lastName }}</p>
+      </li>
+      <li class="list-group-item">
+        <h5 class="card-title">Username</h5>
+        <p class="card-text">{{ userInfo?.userName }}</p>
+      </li>
+      <li class="list-group-item">
+        <h5 class="card-title">Phone</h5>
+        <p class="card-text">{{ userInfo?.phone }}</p>
+      </li>
+      <li class="list-group-item">
+        <h5 class="card-title">Email</h5>
+        <p class="card-text">{{ userInfo?.email }}</p>
+      </li>
+    </ul>
+    <ul
+      class="list-group list-group-flush"
+      *ngFor="let address of userInfo?.userAddress"
+    >
+      <li class="list-group-item list-group-item-secondary">
+        <h3>{{ address.addressType }}</h3>
+      </li>
+      <li class="list-group-item">
+        <h5 class="card-title">Address</h5>
+        <p class="card-text">{{ address.address }}</p>
+      </li>
+      <li class="list-group-item">
+        <h5 class="card-title">Country</h5>
+        <p class="card-text">{{ address.country }}</p>
+      </li>
+      <li class="list-group-item">
+        <h5 class="card-title">City</h5>
+        <p class="card-text">{{ address.city }}</p>
+      </li>
+      <li class="list-group-item">
+        <h5 class="card-title">Postal code</h5>
+        <p class="card-text">{{ address.postalCode }}</p>
+      </li>
+    </ul>
+  </div>
+</div>

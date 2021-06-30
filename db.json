@@ -1,0 +1,75 @@
+{
+  "users": [
+    {
+      "firstName": "Denis",
+      "lastName": "Diachuk",
+      "userName": "Denchik",
+      "phone": "0997572350",
+      "email": "neckromant90@gmail.com",
+      "password": "123456",
+      "confirmPassword": "123456",
+      "userAddress": [
+        {
+          "addressType": "Home Address",
+          "address": "Prospekt",
+          "city": "Chernivci",
+          "country": "Ukraine",
+          "postalCode": "58005"
+        },
+        {
+          "addressType": "Shipping Address",
+          "address": "Kulparkivska",
+          "city": "Lviv",
+          "country": "Ukraine",
+          "postalCode": "55008"
+        }
+      ],
+      "id": 1
+    },
+    {
+      "firstName": "sadsad",
+      "lastName": "sdasdsda",
+      "userName": "sdasdasd",
+      "phone": "6546584984",
+      "email": "asdsad@dsads",
+      "password": "123456",
+      "confirmPassword": "123456",
+      "userAddress": [
+        {
+          "addressType": "Shipping Address",
+          "address": "dsasdasd",
+          "city": "sdasdsda",
+          "country": "Åland Islands",
+          "postalCode": "58465"
+        }
+      ],
+      "id": 2
+    },
+    {
+      "firstName": "fasdfa'sdlf",
+      "lastName": "dassd;l,k;l",
+      "userName": "dapl;sd;pasd",
+      "phone": "485698796854",
+      "email": "dsasd@dsasd",
+      "password": "123456",
+      "confirmPassword": "123456",
+      "userAddress": [
+        {
+          "addressType": "Shipping Address",
+          "address": "dassdasd",
+          "city": "dsasd",
+          "country": "American Samoa",
+          "postalCode": "413232"
+        },
+        {
+          "addressType": "Billing Address",
+          "address": "dsadasdsa",
+          "city": "dsagfasdg",
+          "country": "Australia",
+          "postalCode": "76437654"
+        }
+      ],
+      "id": 3
+    }
+  ]
+}

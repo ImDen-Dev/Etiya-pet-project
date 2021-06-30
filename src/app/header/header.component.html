@@ -1,0 +1,59 @@
+<header class="p-3 bg-dark text-white shadow border-1 border-bottom">
+  <div class="container-fluid">
+    <div
+      class="
+        d-flex
+        flex-wrap
+        align-items-center
+        justify-content-center justify-content-lg-start
+      "
+    >
+      <a
+        href="#"
+        class="
+          d-flex
+          align-items-center
+          mb-2 mb-lg-0
+          text-white text-decoration-none
+        "
+        >ETIYA
+      </a>
+
+      <ul
+        class="
+          nav
+          col-12 col-lg-auto
+          ms-auto
+          mb-2
+          justify-content-center
+          mb-md-0
+        "
+      >
+        <li *ngIf="isAuthenticated">
+          <a routerLink="/user-info" class="nav-link px-2 text-white">Home</a>
+        </li>
+        <li *ngIf="isAuthenticated">
+          <a
+            routerLink="/login"
+            class="nav-link px-2 text-white"
+            (click)="onLogout()"
+          >
+            Logout
+          </a>
+        </li>
+      </ul>
+      <div class="text-end" *ngIf="!isAuthenticated">
+        <button
+          type="button"
+          class="btn btn-outline-light me-2"
+          routerLink="login"
+        >
+          Login
+        </button>
+        <button type="button" class="btn btn-warning" routerLink="sign-up">
+          Sign-up
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
