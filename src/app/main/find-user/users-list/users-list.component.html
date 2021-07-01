@@ -17,38 +17,88 @@
             *ngFor="let user of getFoundUsers.controls; let i = index"
           >
             <tr
+              *ngIf="isEditUser === i"
               [formGroupName]="i"
               style="vertical-align: middle"
-              tableCollapseDirective
             >
-              <ng-container *ngIf="isEdit === i">
-                <td><input type="text" formControlName="firstName" /></td>
-                <td><input type="text" formControlName="lastName" /></td>
-                <td><input type="text" formControlName="userName" /></td>
-                <td><input type="text" formControlName="email" /></td>
-                <td><input type="text" formControlName="phone" /></td>
-              </ng-container>
-              <ng-container *ngIf="isEdit !== i">
-                <td>{{ user.value.firstName }}</td>
-                <td>{{ user.value.lastName }}</td>
-                <td>{{ user.value.userName }}</td>
-                <td>{{ user.value.email }}</td>
-                <td>{{ user.value.phone }}</td>
-              </ng-container>
+              <td>
+                <input
+                  class="form-control"
+                  type="text"
+                  formControlName="firstName"
+                />
+              </td>
+              <td>
+                <input
+                  class="form-control"
+                  type="text"
+                  formControlName="lastName"
+                />
+              </td>
+              <td>
+                <input
+                  class="form-control"
+                  type="text"
+                  formControlName="userName"
+                />
+              </td>
+              <td>
+                <input
+                  class="form-control"
+                  type="text"
+                  formControlName="email"
+                />
+              </td>
+              <td>
+                <input
+                  class="form-control"
+                  type="text"
+                  formControlName="phone"
+                />
+              </td>
+
               <td>
                 <button
                   type="button"
                   class="btn btn-outline-success me-2"
-                  (click)="onUpdate(i)"
+                  (click)="onSave(user.value.id, i)"
                 >
-                  Update
+                  Save
                 </button>
                 <button
                   type="button"
                   class="btn btn-danger"
-                  (click)="onDelete(user.value.id, i)"
+                  (click)="onCancel(i)"
                 >
-                  Delete {{ user.value.id }}
+                  Cancel
+                </button>
+              </td>
+            </tr>
+            <tr
+              [formGroupName]="i"
+              style="vertical-align: middle"
+              tableCollapseDirective
+              *ngIf="isEditUser !== i"
+            >
+              <td>{{ user.value.firstName }}</td>
+              <td>{{ user.value.lastName }}</td>
+              <td>{{ user.value.userName }}</td>
+              <td>{{ user.value.email }}</td>
+              <td>{{ user.value.phone }}</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-outline-success me-2"
+                  (click)="onEditUser(i)"
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  (click)="onDeleteUser(user.value.id, i)"
+                >
+                  Delete
                 </button>
               </td>
             </tr>
@@ -65,55 +115,116 @@
                       <th scope="col">Actions</th>
                     </tr>
                   </thead>
-                  <tbody formArrayName="userAddresses">
+                  <tbody formArrayName="userAddress">
                     <ng-container
                       *ngFor="
                         let address of getUserAddresses(i).controls;
                         let j = index
                       "
                     >
-                      <tr [formGroupName]="j" style="vertical-align: middle">
-                        <ng-container *ngIf="isEdit !== i + j">
-                          <td>
-                            {{ address.value.addressType }}
-                          </td>
-                          <td>{{ address.value.country }}</td>
-                          <td>{{ address.value.city }}</td>
-                          <td>{{ address.value.postalCode }}</td>
-                          <td>{{ address.value.address }}</td>
-                        </ng-container>
-                        <ng-container *ngIf="isEdit === i + j">
-                          <td>
-                            <input type="text" formControlName="addressType" />
-                          </td>
-                          <td>
-                            <input type="text" formControlName="country" />
-                          </td>
-                          <td><input type="text" formControlName="city" /></td>
-                          <td>
-                            <input type="text" formControlName="postalCode" />
-                          </td>
-                          <td>
-                            <input type="text" formControlName="address" />
-                          </td>
-                        </ng-container>
+                      <tr
+                        [formGroupName]="j"
+                        style="vertical-align: middle"
+                        *ngIf="usersArray[i] !== j + 1"
+                      >
+                        <td>
+                          {{ address.value.addressType }}
+                        </td>
+                        <td>{{ address.value.country }}</td>
+                        <td>{{ address.value.city }}</td>
+                        <td>{{ address.value.postalCode }}</td>
+                        <td>{{ address.value.address }}</td>
                         <td>
                           <button
                             type="button"
-                            class="btn btn-outline-success me-2"
-                            (click)="onUpdate(i + j)"
+                            class="btn btn-outline-success me-2 edit"
+                            (click)="onEditUserAddress(i, j)"
                           >
-                            Update
+                            Edit
                           </button>
                           <button
                             type="button"
                             class="btn btn-danger me-2"
-                            (click)="onDelete(user.value.id, i, j)"
+                            [disabled]="
+                              getUserAddresses(i).controls.length === 1
+                            "
+                            (click)="onDeleteAddress(user.value.id, i, j)"
                           >
                             Delete
                           </button>
-                          <button type="button" class="btn btn-primary">
+                          <button
+                            type="button"
+                            class="btn btn-primary"
+                            (click)="onAddNewAddressField(i)"
+                          >
                             Add new
+                          </button>
+                        </td>
+                      </tr>
+                      <tr [formGroupName]="j" *ngIf="usersArray[i] === j + 1">
+                        <td>
+                          <select
+                            class="form-select"
+                            formControlName="addressType"
+                          >
+                            <option disabled selected>
+                              Choose address type
+                            </option>
+                            <option value="Shipping Address">
+                              Shipment Address
+                            </option>
+                            <option value="Billing Address">
+                              Billing Address
+                            </option>
+                            <option value="Home Address">Home Address</option>
+                          </select>
+                        </td>
+                        <td>
+                          <select class="form-select" formControlName="country">
+                            <option disabled selected>Choose country</option>
+                            <option
+                              [value]="country.name"
+                              *ngFor="let country of countries"
+                            >
+                              {{ country.name }}
+                            </option>
+                          </select>
+                        </td>
+                        <td>
+                          <input
+                            class="form-control"
+                            type="text"
+                            formControlName="city"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            class="form-control"
+                            type="text"
+                            formControlName="postalCode"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            class="form-control"
+                            type="text"
+                            formControlName="address"
+                          />
+                        </td>
+                        <td>
+                          <button
+                            type="button"
+                            class="btn btn-outline-success me-2"
+                            (click)="onSave(user.value.id, i)"
+                          >
+                            Save
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-danger me-2"
+                            (click)="onCancel(i)"
+                          >
+                            Cancel
                           </button>
                         </td>
                       </tr>

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { UserInfoModel } from './user-info.model';
 import { UserModel } from '../auth/user.model';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -27,10 +27,12 @@ export class UserService {
     return this.http.delete(`http://localhost:3000/users/${id}`);
   }
 
-  deleteUserAddress(id: number, addressIndex: number) {
-    return this.http.delete(
-      `http://localhost:3000/users/${id}/userAddress/${addressIndex}`
-    );
+  deleteUserAddress(id: number, body: UserInfoModel) {
+    return this.http.patch(`http://localhost:3000/users/${id}`, body);
+  }
+
+  addUserAddress(id: number, body: UserInfoModel) {
+    return this.http.put(`http://localhost:3000/users/${id}`, body);
   }
 
   filterUsers(value: any, response: any[]): UserInfoModel[] {

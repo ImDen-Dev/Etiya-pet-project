@@ -13,7 +13,7 @@ export class TableCollapseDirective {
   constructor(private el: ElementRef, private renderer: Renderer2) {}
 
   @HostListener('click', ['$event.target']) onClick(target: HTMLElement) {
-    if (target.tagName === 'BUTTON') {
+    if (target.tagName === 'BUTTON' || target.tagName === 'INPUT') {
       return;
     }
 

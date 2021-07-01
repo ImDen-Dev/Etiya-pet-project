@@ -1,39 +1,35 @@
 {
   "users": [
     {
-      "firstName": "Denis",
+      "firstName": "Oleh!",
       "lastName": "Diachuk",
       "userName": "Denchik",
       "phone": "0997572350",
       "email": "neckromant90@gmail.com",
-      "password": "123456",
-      "confirmPassword": "123456",
       "userAddress": [
         {
           "addressType": "Home Address",
-          "address": "Prospekt",
+          "address": "mnnnb",
           "city": "Chernivci",
           "country": "Ukraine",
           "postalCode": "58005"
         },
         {
           "addressType": "Shipping Address",
-          "address": "Kulparkivska",
+          "address": "Kulp",
           "city": "Lviv",
-          "country": "Ukraine",
-          "postalCode": "55008"
+          "country": "Chech",
+          "postalCode": "55005"
         }
       ],
       "id": 1
     },
     {
-      "firstName": "Dima",
+      "firstName": "Matvii",
       "lastName": "Diachuk",
       "userName": "Dimon",
       "phone": "0997641278",
       "email": "dimon@dimon.com",
-      "password": "123456",
-      "confirmPassword": "123456",
       "userAddress": [
         {
           "addressType": "Home Address",
@@ -44,6 +40,47 @@
         }
       ],
       "id": 2
+    },
+    {
+      "firstName": "Denis",
+      "lastName": "Diachuk",
+      "userName": "Denchik",
+      "phone": "0997572350",
+      "email": "neckromant90@gmail.com",
+      "userAddress": [
+        {
+          "addressType": "Shipping Address",
+          "address": "Kulp",
+          "city": "Lviv",
+          "country": "Ukraine",
+          "postalCode": "55005"
+        },
+        {
+          "addressType": "Shipping Address",
+          "address": "Krivo",
+          "city": "Lviv",
+          "country": "Ukraine",
+          "postalCode": "58008"
+        }
+      ],
+      "id": 3
+    },
+    {
+      "firstName": "Vasia",
+      "lastName": "Diachuk",
+      "userName": "Dimon",
+      "phone": "0997641278",
+      "email": "dimon@dimon.com",
+      "userAddress": [
+        {
+          "addressType": "Shipping Address",
+          "address": "Krivo",
+          "city": "Lviv",
+          "country": "Ukraine",
+          "postalCode": "58008"
+        }
+      ],
+      "id": 4
     }
   ]
 }

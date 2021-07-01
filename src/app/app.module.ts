@@ -15,6 +15,7 @@ import { UsersListComponent } from './main/find-user/users-list/users-list.compo
 import { TableCollapseDirective } from './shared/table-collapse.directive';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { EditDirective } from './shared/edit.directive';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { HttpClientModule } from '@angular/common/http';
     SidebarComponent,
     UsersListComponent,
     TableCollapseDirective,
+    EditDirective,
   ],
   imports: [
     BrowserModule,

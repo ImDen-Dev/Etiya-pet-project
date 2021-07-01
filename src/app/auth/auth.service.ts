@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { UserModel } from './user.model';
 import { AddressModel } from './address.model';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -26,8 +26,10 @@ export class AuthService {
     return this.http.post('http://localhost:3000/users', user);
   }
 
-  getAllCountries() {
-    return this.http.get('https://restcountries.eu/rest/v2/all?fields=name');
+  getAllCountries(): Observable<{ name: string }[]> {
+    return this.http.get<{ name: string }[]>(
+      'https://restcountries.eu/rest/v2/all?fields=name'
+    );
   }
 
   setUser(user: (UserModel & AddressModel[]) | null) {
