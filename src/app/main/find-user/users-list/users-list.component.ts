@@ -20,7 +20,7 @@ export class UsersListComponent implements OnInit {
   constructor(
     private userService: UserService,
     private fb: FormBuilder,
-    private authService: AuthService
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -31,6 +31,7 @@ export class UsersListComponent implements OnInit {
       });
       if (users) {
         this.users = users;
+        console.log(users);
         this.addUserToForm(users);
       }
     });
@@ -79,8 +80,9 @@ export class UsersListComponent implements OnInit {
       userName: [user.userName],
       phone: [user.phone],
       email: [user.email],
-      userAddress: this.fb.array([]),
       id: [user.id],
+      password: [user.password],
+      userAddress: this.fb.array([]),
     });
   }
 

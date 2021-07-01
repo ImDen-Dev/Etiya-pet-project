@@ -1,86 +1,22 @@
 {
   "users": [
     {
-      "firstName": "Oleh!",
-      "lastName": "Diachuk",
-      "userName": "Denchik",
-      "phone": "0997572350",
-      "email": "neckromant90@gmail.com",
+      "firstName": "dadasd",
+      "lastName": "sdasdasd",
+      "userName": "dsasdasdas",
+      "phone": "312423213345",
+      "email": "sadfasd@dasda",
+      "id": 1,
+      "password": "123456",
       "userAddress": [
         {
-          "addressType": "Home Address",
-          "address": "mnnnb",
-          "city": "Chernivci",
-          "country": "Ukraine",
+          "addressType": "Billing Address",
+          "address": "dsasd",
+          "city": "dsasdasd",
+          "country": "American Samoa",
           "postalCode": "58005"
-        },
-        {
-          "addressType": "Shipping Address",
-          "address": "Kulp",
-          "city": "Lviv",
-          "country": "Chech",
-          "postalCode": "55005"
         }
-      ],
-      "id": 1
-    },
-    {
-      "firstName": "Matvii",
-      "lastName": "Diachuk",
-      "userName": "Dimon",
-      "phone": "0997641278",
-      "email": "dimon@dimon.com",
-      "userAddress": [
-        {
-          "addressType": "Home Address",
-          "address": "Prospekt",
-          "city": "Chernivtci",
-          "country": "Kazakhstan",
-          "postalCode": "59004"
-        }
-      ],
-      "id": 2
-    },
-    {
-      "firstName": "Denis",
-      "lastName": "Diachuk",
-      "userName": "Denchik",
-      "phone": "0997572350",
-      "email": "neckromant90@gmail.com",
-      "userAddress": [
-        {
-          "addressType": "Shipping Address",
-          "address": "Kulp",
-          "city": "Lviv",
-          "country": "Ukraine",
-          "postalCode": "55005"
-        },
-        {
-          "addressType": "Shipping Address",
-          "address": "Krivo",
-          "city": "Lviv",
-          "country": "Ukraine",
-          "postalCode": "58008"
-        }
-      ],
-      "id": 3
-    },
-    {
-      "firstName": "Vasia",
-      "lastName": "Diachuk",
-      "userName": "Dimon",
-      "phone": "0997641278",
-      "email": "dimon@dimon.com",
-      "userAddress": [
-        {
-          "addressType": "Shipping Address",
-          "address": "Krivo",
-          "city": "Lviv",
-          "country": "Ukraine",
-          "postalCode": "58008"
-        }
-      ],
-      "id": 4
+      ]
     }
   ]
 }
