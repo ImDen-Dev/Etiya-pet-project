@@ -4,6 +4,7 @@ import { UserModel } from '../user.model';
 import { AuthService } from '../auth.service';
 import { AddressModel } from '../address.model';
 import { Router } from '@angular/router';
+import { UserInfoModel } from '../../shared/user-info.model';
 
 @Component({
   selector: 'app-sign-up',
@@ -119,9 +120,11 @@ export class SignUpComponent implements OnInit {
   }
 
   onSave() {
-    const userInfo: UserModel = this.mainInfo.value;
+    const userInfo: UserModel = <UserModel>this.mainInfo.value;
+    delete userInfo.confirmPassword;
+
     const addressInfo: AddressModel[] = this.addressInfo.value;
-    const user = Object.assign(userInfo, addressInfo);
+    const user = <UserInfoModel>{ ...userInfo, ...addressInfo };
     this.authService.createUser(user).subscribe(() => {
       this.authService.isAuth.next(true);
       this.router.navigate(['user-info']);

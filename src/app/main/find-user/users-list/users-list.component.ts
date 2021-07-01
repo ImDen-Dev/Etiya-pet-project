@@ -24,14 +24,12 @@ export class UsersListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log();
     this.userService.foundUsers.subscribe((users) => {
       this.forms = this.fb.group({
         foundUsers: this.fb.array([]),
       });
       if (users) {
         this.users = users;
-        console.log(users);
         this.addUserToForm(users);
       }
     });
@@ -125,7 +123,7 @@ export class UsersListComponent implements OnInit {
   onSave(id: number, userIndex: number) {
     const body = this.getFoundUsers.at(userIndex).value;
     this.userService.addUserAddress(id, body).subscribe(
-      (value) => {
+      () => {
         this.users[userIndex] = this.getFoundUsers.at(userIndex).value;
         this.exitEditMode();
       },

@@ -17,6 +17,62 @@
           "postalCode": "58005"
         }
       ]
+    },
+    {
+      "firstName": "Denis",
+      "lastName": "Diachuk",
+      "userName": "Denchik",
+      "phone": "0997572350",
+      "email": "neckromant90@gmail.com",
+      "password": "123456",
+      "confirmPassword": "123456",
+      "userAddress": [
+        {
+          "addressType": "Home Address",
+          "address": "Prospekt",
+          "city": "Chernivtci",
+          "country": "Ukraine",
+          "postalCode": "58005"
+        }
+      ],
+      "id": 2
+    },
+    {
+      "firstName": "Matvii",
+      "lastName": "Matvii",
+      "userName": "Mat",
+      "phone": "1234567897",
+      "email": "Matvii@mat",
+      "password": "123456",
+      "confirmPassword": "123456",
+      "userAddress": [
+        {
+          "addressType": "Billing Address",
+          "address": "Kulp",
+          "city": "Lviv",
+          "country": "Ukraine",
+          "postalCode": "58005"
+        }
+      ],
+      "id": 3
+    },
+    {
+      "firstName": "Nazar",
+      "lastName": "Muntian",
+      "userName": "Nazarchik",
+      "phone": "1234968778",
+      "email": "dsasd@dsasd",
+      "password": "123456",
+      "userAddress": [
+        {
+          "addressType": "Billing Address",
+          "address": "Golovna",
+          "city": "Odessa",
+          "country": "Ukraine",
+          "postalCode": "69004"
+        }
+      ],
+      "id": 4
     }
   ]
 }

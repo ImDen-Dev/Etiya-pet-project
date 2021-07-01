@@ -3,6 +3,7 @@ import { UserModel } from '../auth/user.model';
 import { AddressModel } from '../auth/address.model';
 import { AuthService } from '../auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UserInfoModel } from '../shared/user-info.model';
 
 @Component({
   selector: 'app-user-info',
@@ -12,7 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class UserInfoComponent implements OnInit {
   @Input() mainInfo!: UserModel;
   @Input() addressInfo!: AddressModel[];
-  userInfo!: UserModel & AddressModel[];
+  userInfo!: UserInfoModel;
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -21,12 +22,14 @@ export class UserInfoComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.mainInfo && this.addressInfo) {
-      this.userInfo = Object.assign(this.mainInfo, this.addressInfo);
+      this.userInfo = <UserInfoModel>(
+        Object.assign(this.mainInfo, this.addressInfo)
+      );
       return;
     }
 
     const user = this.authService.getUser();
-    console.log(this.route.snapshot.component);
+    console.log(user);
     if (!user) {
       this.router.navigate(['login']);
       return;

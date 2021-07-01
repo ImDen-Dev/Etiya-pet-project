@@ -3,16 +3,18 @@ import { UserModel } from './user.model';
 import { AddressModel } from './address.model';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { UserInfoModel } from '../shared/user-info.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   isAuth = new BehaviorSubject<boolean>(false);
-  private user!: (UserModel & AddressModel[]) | null;
+  private user!: UserInfoModel | null;
 
   constructor(private http: HttpClient) {}
 
   login(user: { email: string; password: string }) {
-    return this.http.get<[UserModel & AddressModel[]]>(
+    return this.http.get<UserInfoModel[]>(
       `http://localhost:3000/users?email=${user.email}&password=${user.password}`
     );
   }
@@ -22,8 +24,8 @@ export class AuthService {
     this.setUser(null);
   }
 
-  createUser(user: UserModel & AddressModel[]) {
-    return this.http.post('http://localhost:3000/users', user);
+  createUser(user: UserInfoModel) {
+    return this.http.post<UserInfoModel>('http://localhost:3000/users', user);
   }
 
   getAllCountries(): Observable<{ name: string }[]> {
@@ -32,11 +34,11 @@ export class AuthService {
     );
   }
 
-  setUser(user: (UserModel & AddressModel[]) | null) {
+  setUser(user: UserInfoModel | null) {
     this.user = user;
   }
 
-  getUser() {
-    return this.user;
+  getUser(): UserInfoModel {
+    return <UserInfoModel>this.user;
   }
 }
