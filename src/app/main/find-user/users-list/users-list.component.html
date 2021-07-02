@@ -61,6 +61,7 @@
                 <button
                   type="button"
                   class="btn btn-outline-success me-2"
+                  [disabled]="getFoundUsers.at(i).invalid"
                   (click)="onSave(user.value.id, i)"
                 >
                   Save
@@ -72,6 +73,110 @@
                 >
                   Cancel
                 </button>
+              </td>
+            </tr>
+            <tr *ngIf="getFoundUsers.at(i).invalid">
+              <td>
+                <div *ngIf="getFoundUsers.at(i).get('firstName')?.errors">
+                  <p
+                    class="text-danger"
+                    *ngIf="
+                      getFoundUsers.at(i).get('firstName')?.errors?.required
+                    "
+                  >
+                    First name is required
+                  </p>
+                  <p
+                    class="text-danger"
+                    *ngIf="
+                      getFoundUsers.at(i).get('firstName')?.errors?.minlength
+                    "
+                  >
+                    First name must be at least 3 character
+                  </p>
+                </div>
+              </td>
+              <td>
+                <div *ngIf="getFoundUsers.at(i).get('lastName')?.errors">
+                  <p
+                    class="text-danger"
+                    *ngIf="
+                      getFoundUsers.at(i).get('lastName')?.errors?.required
+                    "
+                  >
+                    Last name is required
+                  </p>
+                  <p
+                    class="text-danger"
+                    *ngIf="
+                      getFoundUsers.at(i).get('lastName')?.errors?.minlength
+                    "
+                  >
+                    Last name must be at least 3 character
+                  </p>
+                </div>
+              </td>
+              <td>
+                <div *ngIf="getFoundUsers.at(i).get('userName')?.errors">
+                  <p
+                    class="text-danger"
+                    *ngIf="
+                      getFoundUsers.at(i).get('userName')?.errors?.required
+                    "
+                  >
+                    User name is required
+                  </p>
+                  <p
+                    class="text-danger"
+                    *ngIf="
+                      getFoundUsers.at(i).get('userName')?.errors?.minlength
+                    "
+                  >
+                    User name must be at least 3 character
+                  </p>
+                </div>
+              </td>
+              <td>
+                <div *ngIf="getFoundUsers.at(i).get('email')?.errors">
+                  <p
+                    class="text-danger"
+                    *ngIf="getFoundUsers.at(i).get('email')?.errors?.required"
+                  >
+                    Email is required
+                  </p>
+                  <p
+                    class="text-danger"
+                    *ngIf="getFoundUsers.at(i).get('email')?.errors?.email"
+                  >
+                    Not valid email
+                  </p>
+                </div>
+              </td>
+              <td>
+                <div *ngIf="getFoundUsers.at(i).get('phone')?.errors">
+                  <p
+                    class="text-danger"
+                    *ngIf="getFoundUsers.at(i).get('phone')?.errors?.required"
+                  >
+                    Phone is required
+                  </p>
+                  <p
+                    class="text-danger"
+                    *ngIf="
+                      (getFoundUsers.at(i).get('phone')?.errors?.minlength ||
+                        getFoundUsers.at(i).get('phone')?.errors?.maxlength) &&
+                      !getFoundUsers.at(i).get('phone')?.errors?.pattern
+                    "
+                  >
+                    Phone number must be between 10 and 13 digits
+                  </p>
+                  <p
+                    class="text-danger"
+                    *ngIf="getFoundUsers.at(i).get('phone')?.errors?.pattern"
+                  >
+                    Phone number can only be digits
+                  </p>
+                </div>
               </td>
             </tr>
             <tr
@@ -96,7 +201,7 @@
                 <button
                   type="button"
                   class="btn btn-danger"
-                  (click)="onDeleteUser(user.value.id, i)"
+                  (click)="onDelete(user.value.id, i)"
                 >
                   Delete
                 </button>
@@ -150,7 +255,7 @@
                             [disabled]="
                               getUserAddresses(i).controls.length === 1
                             "
-                            (click)="onDeleteAddress(user.value.id, i, j)"
+                            (click)="onDelete(user.value.id, i, j)"
                           >
                             Delete
                           </button>
@@ -217,6 +322,7 @@
                           <button
                             type="button"
                             class="btn btn-outline-success me-2"
+                            [disabled]="getUserAddressControls(i, j).invalid"
                             (click)="onSave(user.value.id, i)"
                           >
                             Save
@@ -230,6 +336,107 @@
                           </button>
                         </td>
                       </tr>
+
+                      <tr *ngIf="getUserAddressControls(i, j).invalid">
+                        <td>
+                          <div
+                            *ngIf="
+                              getUserAddressControls(i, j).get('addressType')
+                                ?.errors
+                            "
+                          >
+                            <p
+                              class="text-danger"
+                              *ngIf="
+                                getUserAddressControls(i, j).get('addressType')
+                                  ?.errors?.required
+                              "
+                            >
+                              Address type is required
+                            </p>
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            *ngIf="
+                              getUserAddressControls(i, j).get('country')
+                                ?.errors
+                            "
+                          >
+                            <p
+                              class="text-danger"
+                              *ngIf="
+                                getUserAddressControls(i, j).get('country')
+                                  ?.errors?.required
+                              "
+                            >
+                              Country is required
+                            </p>
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            *ngIf="
+                              getUserAddressControls(i, j).get('city')?.errors
+                            "
+                          >
+                            <p
+                              class="text-danger"
+                              *ngIf="
+                                getUserAddressControls(i, j).get('city')?.errors
+                                  ?.required
+                              "
+                            >
+                              City is required
+                            </p>
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            *ngIf="
+                              getUserAddressControls(i, j).get('postalCode')
+                                ?.errors
+                            "
+                          >
+                            <p
+                              class="text-danger"
+                              *ngIf="
+                                getUserAddressControls(i, j).get('postalCode')
+                                  ?.errors?.required
+                              "
+                            >
+                              Postal code is required
+                            </p>
+                            <p
+                              class="text-danger"
+                              *ngIf="
+                                getUserAddressControls(i, j).get('postalCode')
+                                  ?.errors?.pattern
+                              "
+                            >
+                              Postal code can only be digits
+                            </p>
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            *ngIf="
+                              getUserAddressControls(i, j).get('address')
+                                ?.errors
+                            "
+                          >
+                            <p
+                              class="text-danger"
+                              *ngIf="
+                                getUserAddressControls(i, j).get('address')
+                                  ?.errors?.required
+                              "
+                            >
+                              Address is required
+                            </p>
+                          </div>
+                        </td>
+                      </tr>
                     </ng-container>
                   </tbody>
                 </table>
@@ -241,4 +448,45 @@
     </form>
   </div>
   <div class="text-center" *ngIf="users.length <= 0">Users not found yet</div>
+</div>
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+  [ngStyle]="{ display: isShowPopup ? 'block' : 'none' }"
+  [ngClass]="{ show: isShowPopup }"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete warning</h5>
+        <button
+          type="button"
+          class="close btn btn-outline-secondary"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="onCancelDelete()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">Are you sure?</div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-dismiss="modal"
+          (click)="onCancelDelete()"
+        >
+          Cancel
+        </button>
+        <button type="button" class="btn btn-primary" (click)="delete()">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

@@ -43,7 +43,9 @@ export class UserService {
     });
     if (Object.keys(value).length === 0) return response;
     return response.filter((user) =>
-      Object.keys(value).every((key) => user[key].includes(value[key]))
+      Object.keys(value).every((key) =>
+        user[key].toLowerCase().includes(value[key].toLowerCase())
+      )
     );
   }
 }

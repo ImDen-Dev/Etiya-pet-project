@@ -6,7 +6,11 @@ table {
     input,
     select {
       width: 100%;
-      max-width: 120px;
+      max-width: 150px;
     }
   }
+}
+
+.text-danger {
+  max-width: 150px;
 }
