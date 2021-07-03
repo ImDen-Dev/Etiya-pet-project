@@ -3,7 +3,7 @@
   style="width: 280px"
 >
   <ul class="nav nav-pills flex-column mb-auto">
-    <li class="nav-item" *ngIf="authService.isAuth | async">
+    <li class="nav-item" *ngIf="isAuth$ | async">
       <a
         routerLink="/user-info"
         routerLinkActive="active"
@@ -14,7 +14,7 @@
         <span class="ms-2">User info</span>
       </a>
     </li>
-    <li class="nav-item" *ngIf="authService.isAuth | async">
+    <li class="nav-item" *ngIf="isAuth$ | async">
       <a
         routerLink="/sign-up"
         routerLinkActive="active"

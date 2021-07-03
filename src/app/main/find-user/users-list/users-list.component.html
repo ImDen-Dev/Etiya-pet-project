@@ -9,7 +9,7 @@
             <th scope="col">User Name</th>
             <th scope="col">Email</th>
             <th scope="col">Phone</th>
-            <th scope="col" *ngIf="authService.isAuth | async">Actions</th>
+            <th scope="col" *ngIf="isAuth$ | async">Actions</th>
           </tr>
         </thead>
         <tbody formArrayName="foundUsers">
@@ -57,7 +57,7 @@
                 />
               </td>
 
-              <td *ngIf="authService.isAuth | async">
+              <td *ngIf="isAuth$ | async">
                 <button
                   type="button"
                   class="btn btn-outline-success me-2"
@@ -190,7 +190,7 @@
               <td>{{ user.value.userName }}</td>
               <td>{{ user.value.email }}</td>
               <td>{{ user.value.phone }}</td>
-              <td *ngIf="authService.isAuth | async">
+              <td *ngIf="isAuth$ | async">
                 <button
                   type="button"
                   class="btn btn-outline-success me-2"
@@ -217,9 +217,7 @@
                       <th scope="col">City</th>
                       <th scope="col">Postal Code</th>
                       <th scope="col">Address</th>
-                      <th scope="col" *ngIf="authService.isAuth | async">
-                        Actions
-                      </th>
+                      <th scope="col" *ngIf="isAuth$ | async">Actions</th>
                     </tr>
                   </thead>
                   <tbody formArrayName="userAddress">
@@ -241,7 +239,7 @@
                         <td>{{ address.value.city }}</td>
                         <td>{{ address.value.postalCode }}</td>
                         <td>{{ address.value.address }}</td>
-                        <td *ngIf="authService.isAuth | async">
+                        <td *ngIf="isAuth$ | async">
                           <button
                             type="button"
                             class="btn btn-outline-success me-2 edit"
@@ -286,7 +284,7 @@
                             <option value="Home Address">Home Address</option>
                           </select>
                         </td>
-                        <td *ngIf="authService.isAuth | async">
+                        <td *ngIf="isAuth$ | async">
                           <select class="form-select" formControlName="country">
                             <option disabled selected>Choose country</option>
                             <option
@@ -330,7 +328,7 @@
                           <button
                             type="button"
                             class="btn btn-danger me-2"
-                            (click)="onCancel(i)"
+                            (click)="onCancel(i, j)"
                           >
                             Cancel
                           </button>

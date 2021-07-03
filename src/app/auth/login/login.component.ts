@@ -1,19 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { Store } from '@ngxs/store';
+import { LoginAction } from '../auth-state/auth.actions';
+import { switchMap } from 'rxjs/operators';
+import { AuthState } from '../auth-state/auth.state';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm!: FormGroup;
+  sub!: Subscription;
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
@@ -26,24 +33,25 @@ export class LoginComponent implements OnInit {
 
   initForm() {
     this.loginForm = this.fb.group({
-      email: [null, Validators.required],
+      email: [null, [Validators.required, Validators.email]],
       password: [null, Validators.required],
     });
   }
 
   onSubmit() {
-    this.authService.login(this.loginForm.value).subscribe(
-      (resp) => {
-        console.log(resp);
-        if (resp.length > 0) {
-          this.authService.setUser(resp[0]);
-          this.authService.isAuth.next(true);
-          this.router.navigate(['user-info']);
-        } else {
-          this.router.navigate(['sign-up']);
-        }
-      },
-      (error) => console.log(error)
-    );
+    this.sub = this.store
+      .dispatch(new LoginAction(this.loginForm.value))
+      .subscribe(() => {
+        const isAuth = this.store.selectSnapshot(AuthState.isAuth);
+        isAuth
+          ? this.router.navigate(['user-info'])
+          : this.router.navigate(['sign-up']);
+      });
+  }
+
+  ngOnDestroy() {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 }

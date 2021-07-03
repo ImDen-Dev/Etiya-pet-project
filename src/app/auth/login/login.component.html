@@ -13,6 +13,9 @@
       <p class="text-danger" *ngIf="getLoginForm.email.errors.required">
         Email is required
       </p>
+      <p class="text-danger" *ngIf="getLoginForm.email.errors.emil">
+        Not valid email
+      </p>
     </div>
   </div>
   <div class="mb-3">

@@ -5,6 +5,8 @@ import { AuthService } from '../auth.service';
 import { AddressModel } from '../address.model';
 import { Router } from '@angular/router';
 import { UserInfoModel } from '../../shared/user-info.model';
+import { Store } from '@ngxs/store';
+import { CreateUserAction } from '../auth-state/auth.actions';
 
 @Component({
   selector: 'app-sign-up',
@@ -20,7 +22,8 @@ export class SignUpComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public authService: AuthService,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
@@ -80,10 +83,6 @@ export class SignUpComponent implements OnInit {
     return this.mainInfo.controls;
   }
 
-  get getAddressInfoForm() {
-    return this.addressInfo.controls;
-  }
-
   get getAddressInfoArray() {
     return this.addressInfo.get('userAddress') as FormArray;
   }
@@ -122,13 +121,11 @@ export class SignUpComponent implements OnInit {
   onSave() {
     const userInfo: UserModel = <UserModel>this.mainInfo.value;
     delete userInfo.confirmPassword;
-
     const addressInfo: AddressModel[] = this.addressInfo.value;
     const user = <UserInfoModel>{ ...userInfo, ...addressInfo };
-    this.authService.createUser(user).subscribe(() => {
-      this.authService.isAuth.next(true);
+
+    this.store.dispatch(new CreateUserAction(user)).subscribe(() => {
       this.router.navigate(['user-info']);
-      this.authService.setUser(user);
     });
   }
 }

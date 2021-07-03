@@ -1,7 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { NgxsModule } from '@ngxs/store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 
 import { AppRoutingModule } from './app-routing.module';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { SignUpComponent } from './auth/sign-up/sign-up.component';
@@ -12,10 +18,13 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { UsersListComponent } from './main/find-user/users-list/users-list.component';
+
 import { TableCollapseDirective } from './shared/table-collapse.directive';
-import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { EditDirective } from './shared/edit.directive';
+
+import { AuthState } from './auth/auth-state/auth.state';
+
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -37,6 +46,11 @@ import { EditDirective } from './shared/edit.directive';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgxsModule.forRoot([AuthState], {
+      developmentMode: !environment.production,
+    }),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
+    NgxsLoggerPluginModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],

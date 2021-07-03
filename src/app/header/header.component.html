@@ -29,10 +29,7 @@
           mb-md-0
         "
       >
-        <!--        <li *ngIf="isAuthenticated">
-          <a routerLink="/user-info" class="nav-link px-2 text-white">Home</a>
-        </li>-->
-        <li *ngIf="isAuthenticated">
+        <li *ngIf="isAuth$ | async">
           <a
             routerLink="/login"
             class="nav-link px-2 text-white"
@@ -42,7 +39,7 @@
           </a>
         </li>
       </ul>
-      <div class="text-end" *ngIf="!isAuthenticated">
+      <div class="text-end" *ngIf="!(isAuth$ | async)">
         <button
           type="button"
           class="btn btn-outline-light me-2"

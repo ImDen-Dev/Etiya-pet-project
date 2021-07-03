@@ -63,22 +63,40 @@
       ]
     },
     {
-      "firstName": "sdafadgdfasf",
-      "lastName": "fdasfdasdf",
-      "userName": "fdasdfasdf",
+      "firstName": "Mavrodi",
+      "lastName": "mmm",
+      "userName": "Mavr",
       "phone": "2352345245234",
       "email": "fgdafdf@fsdfdsdf",
+      "id": 6,
       "password": "123456",
       "userAddress": [
         {
           "addressType": "Billing Address",
           "address": "fasddfasdf",
-          "city": "fa451sfdafaads",
+          "city": "Kharkov",
           "country": "Australia",
           "postalCode": "1324654"
         }
+      ]
+    },
+    {
+      "firstName": "Karina",
+      "lastName": "Krupa",
+      "userName": "Krupskaja",
+      "phone": "0994524831",
+      "email": "krupa@gmail.com",
+      "password": "123456",
+      "userAddress": [
+        {
+          "addressType": "Home Address",
+          "address": "Bulvar",
+          "city": "Chernivtci",
+          "country": "Ukraine",
+          "postalCode": "58002"
+        }
       ],
-      "id": 6
+      "id": 7
     }
   ]
 }

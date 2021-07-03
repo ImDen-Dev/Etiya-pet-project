@@ -5,7 +5,9 @@ import { UserService } from '../../../shared/user.service';
 import { UserInfoModel } from '../../../shared/user-info.model';
 import { AddressModel } from '../../../auth/address.model';
 import { AuthService } from '../../../auth/auth.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { Select } from '@ngxs/store';
+import { AuthState } from '../../../auth/auth-state/auth.state';
 
 @Component({
   selector: 'app-users-list',
@@ -30,16 +32,22 @@ export class UsersListComponent implements OnInit, OnDestroy {
     public authService: AuthService
   ) {}
 
+  @Select(AuthState.isAuth) isAuth$!: Observable<boolean>;
+
   ngOnInit(): void {
+    this.initForm();
     this.getUsers();
     this.getCountries();
   }
 
+  initForm() {
+    this.forms = this.fb.group({
+      foundUsers: this.fb.array([]),
+    });
+  }
+
   getUsers() {
     const usersSub = this.userService.foundUsers.subscribe((users) => {
-      this.forms = this.fb.group({
-        foundUsers: this.fb.array([]),
-      });
       if (users) {
         this.users = users;
         this.addUserToForm(users);
@@ -136,13 +144,18 @@ export class UsersListComponent implements OnInit, OnDestroy {
       .deleteUserAddress(id, userValue)
       .subscribe(
         () => {
-          (
-            this.getFoundUsers.at(userIndex).get('userAddress') as FormArray
-          ).removeAt(addressIndex);
+          this.removeAddressFromForm(userIndex, addressIndex);
+          this.users = this.getFoundUsers.value;
         },
         (error) => console.log(error)
       );
     this.subscriptions.push(deleteUserAddressSub);
+  }
+
+  removeAddressFromForm(userIndex: number, addressIndex: number) {
+    (this.getFoundUsers.at(userIndex).get('userAddress') as FormArray).removeAt(
+      addressIndex
+    );
   }
 
   onDelete(id: number, userIndex: number, addressIndex?: number) {
@@ -163,16 +176,13 @@ export class UsersListComponent implements OnInit, OnDestroy {
         this.deleteUserIndex,
         this.deleteAddressIndex
       );
-      this.onCancelDelete();
     } else if (
       this.deleteUserId !== undefined &&
       this.deleteUserIndex !== undefined
     ) {
       this.onDeleteUser(this.deleteUserId, this.deleteUserIndex);
-      this.onCancelDelete();
-    } else {
-      this.onCancelDelete();
     }
+    this.onCancelDelete();
   }
 
   onCancelDelete() {
@@ -229,7 +239,13 @@ export class UsersListComponent implements OnInit, OnDestroy {
     this.isEditUser = NaN;
   }
 
-  onCancel(userIndex: number) {
+  onCancel(userIndex: number, addressIndex?: number) {
+    if (addressIndex) {
+      if (this.getUserAddressControls(userIndex, addressIndex).invalid) {
+        this.removeAddressFromForm(userIndex, addressIndex);
+      }
+    }
+
     this.getFoundUsers.at(userIndex).patchValue(this.users[userIndex]);
     this.exitEditMode();
   }

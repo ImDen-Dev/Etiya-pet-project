@@ -3,24 +3,23 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { UserInfoModel } from './user-info.model';
 import { UserModel } from '../auth/user.model';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
   foundUsers = new BehaviorSubject<UserInfoModel[]>([]);
   constructor(private http: HttpClient) {}
 
-  findUser(formValue: UserModel): void {
-    this.http
-      .get<UserInfoModel[]>(`http://localhost:3000/users`)
-      .pipe(
+  findUsers(): Observable<UserInfoModel[]> {
+    return this.http.get<UserInfoModel[]>(`http://localhost:3000/users`);
+    /*      .pipe(
         map((response) => {
           return this.filterUsers(formValue, response);
         })
       )
       .subscribe((users) => {
         this.foundUsers.next(users);
-      });
+      });*/
   }
 
   deleteUser(id: number) {
@@ -35,7 +34,7 @@ export class UserService {
     return this.http.put(`http://localhost:3000/users/${id}`, body);
   }
 
-  filterUsers(value: any, response: any[]): UserInfoModel[] {
+  /*filterUsers(value: any, response: any[]): UserInfoModel[] {
     Object.keys(value).forEach((key) => {
       if (value[key] === null) {
         delete value[key];
@@ -47,5 +46,5 @@ export class UserService {
         user[key].toLowerCase().includes(value[key].toLowerCase())
       )
     );
-  }
+  }*/
 }
