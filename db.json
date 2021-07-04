@@ -31,18 +31,17 @@
       "userName": "Mat",
       "phone": "1234567897",
       "email": "Matvii@mat",
+      "id": 3,
       "password": "123456",
-      "confirmPassword": "123456",
       "userAddress": [
         {
-          "addressType": "Billing Address",
+          "addressType": "Shipping Address",
           "address": "Kulp",
           "city": "Lviv",
           "country": "Ukraine",
           "postalCode": "58005"
         }
-      ],
-      "id": 3
+      ]
     },
     {
       "firstName": "Nazar",
@@ -67,7 +66,7 @@
       "lastName": "mmm",
       "userName": "Mavr",
       "phone": "2352345245234",
-      "email": "fgdafdf@fsdfdsdf",
+      "email": "mavrodi@mmm.com",
       "id": 6,
       "password": "123456",
       "userAddress": [
@@ -86,6 +85,7 @@
       "userName": "Krupskaja",
       "phone": "0994524831",
       "email": "krupa@gmail.com",
+      "id": 7,
       "password": "123456",
       "userAddress": [
         {
@@ -95,8 +95,7 @@
           "country": "Ukraine",
           "postalCode": "58002"
         }
-      ],
-      "id": 7
+      ]
     }
   ]
 }

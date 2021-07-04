@@ -23,6 +23,7 @@ import { TableCollapseDirective } from './shared/table-collapse.directive';
 import { EditDirective } from './shared/edit.directive';
 
 import { AuthState } from './auth/auth-state/auth.state';
+import { UsersState } from './main/users-state/users.state';
 
 import { environment } from '../environments/environment';
 
@@ -46,7 +47,7 @@ import { environment } from '../environments/environment';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgxsModule.forRoot([AuthState], {
+    NgxsModule.forRoot([AuthState, UsersState], {
       developmentMode: !environment.production,
     }),
     NgxsReduxDevtoolsPluginModule.forRoot(),

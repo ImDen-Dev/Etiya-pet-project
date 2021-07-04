@@ -17,7 +17,10 @@
             *ngFor="let user of getFoundUsers.controls; let i = index"
           >
             <tr
-              *ngIf="isEditUser === i"
+              *ngIf="
+                (edit$ | async)?.userId === i &&
+                (edit$ | async)?.addressIndex === null
+              "
               [formGroupName]="i"
               style="vertical-align: middle"
             >
@@ -182,8 +185,12 @@
             <tr
               [formGroupName]="i"
               style="vertical-align: middle"
-              tableCollapseDirective
-              *ngIf="isEditUser !== i"
+              (click)="openUser(user.value.id)"
+              *ngIf="
+                (edit$ | async)?.userId !== i ||
+                ((edit$ | async)?.userId === i &&
+                  (edit$ | async)?.addressIndex !== null)
+              "
             >
               <td>{{ user.value.firstName }}</td>
               <td>{{ user.value.lastName }}</td>
@@ -194,7 +201,7 @@
                 <button
                   type="button"
                   class="btn btn-outline-success me-2"
-                  (click)="onEditUser(i)"
+                  (click)="onEdit(i, null)"
                 >
                   Edit
                 </button>
@@ -207,7 +214,11 @@
                 </button>
               </td>
             </tr>
-            <tr class="collapse" [formGroupName]="i">
+            <tr
+              class="collapse"
+              [formGroupName]="i"
+              [ngClass]="{ show: (opened$ | async) === user.value.id }"
+            >
               <td colspan="6">
                 <table class="table table-striped">
                   <thead>
@@ -230,7 +241,10 @@
                       <tr
                         [formGroupName]="j"
                         style="vertical-align: middle"
-                        *ngIf="usersArray[i] !== j + 1"
+                        *ngIf="
+                          (edit$ | async)?.userId !== i ||
+                          (edit$ | async)?.addressIndex !== j
+                        "
                       >
                         <td>
                           {{ address.value.addressType }}
@@ -243,7 +257,7 @@
                           <button
                             type="button"
                             class="btn btn-outline-success me-2 edit"
-                            (click)="onEditUserAddress(i, j)"
+                            (click)="onEdit(i, j)"
                           >
                             Edit
                           </button>
@@ -266,7 +280,13 @@
                           </button>
                         </td>
                       </tr>
-                      <tr [formGroupName]="j" *ngIf="usersArray[i] === j + 1">
+                      <tr
+                        [formGroupName]="j"
+                        *ngIf="
+                          (edit$ | async)?.userId === i &&
+                          (edit$ | async)?.addressIndex === j
+                        "
+                      >
                         <td>
                           <select
                             class="form-select"

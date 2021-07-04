@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../shared/user.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Store } from '@ngxs/store';
+import { FindUsersAction, GetUsersAction } from '../users-state/users.actions';
 
 @Component({
   selector: 'app-find-user',
@@ -9,7 +11,11 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class FindUserComponent implements OnInit {
   findUserForm!: FormGroup;
-  constructor(private userService: UserService, private fb: FormBuilder) {}
+  constructor(
+    private userService: UserService,
+    private fb: FormBuilder,
+    private store: Store
+  ) {}
 
   ngOnInit(): void {
     this.initFindUserForm();
@@ -26,6 +32,6 @@ export class FindUserComponent implements OnInit {
   }
 
   onSubmit() {
-    this.userService.findUser(this.findUserForm.value);
+    this.store.dispatch(new FindUsersAction(this.findUserForm.value));
   }
 }

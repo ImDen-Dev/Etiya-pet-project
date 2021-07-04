@@ -6,8 +6,14 @@ import { UserInfoModel } from '../../../shared/user-info.model';
 import { AddressModel } from '../../../auth/address.model';
 import { AuthService } from '../../../auth/auth.service';
 import { Observable, Subscription } from 'rxjs';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { AuthState } from '../../../auth/auth-state/auth.state';
+import { UsersState } from '../../users-state/users.state';
+import {
+  EditUserAction,
+  OpenUserAction,
+  UpdateUserAction,
+} from '../../users-state/users.actions';
 
 @Component({
   selector: 'app-users-list',
@@ -29,13 +35,20 @@ export class UsersListComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
     private fb: FormBuilder,
-    public authService: AuthService
+    public authService: AuthService,
+    private store: Store
   ) {}
 
   @Select(AuthState.isAuth) isAuth$!: Observable<boolean>;
+  @Select(UsersState.getUsers) users$!: Observable<UserInfoModel[]>;
+  @Select(UsersState.getOpenUser) opened$!: Observable<number | null>;
+  @Select(UsersState.edit) edit$!: Observable<{
+    userId: number | null;
+    addressIndex: number | null;
+  }>;
 
   ngOnInit(): void {
-    this.initForm();
+    /*this.initForm();*/
     this.getUsers();
     this.getCountries();
   }
@@ -47,7 +60,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
   }
 
   getUsers() {
-    const usersSub = this.userService.foundUsers.subscribe((users) => {
+    const usersSub = this.users$.subscribe((users) => {
       if (users) {
         this.users = users;
         this.addUserToForm(users);
@@ -77,6 +90,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
   }
 
   addUserToForm(users: UserInfoModel[]) {
+    this.initForm();
     this.usersArray = new Array(users.length).fill(0);
     users.forEach((user, index) => {
       this.getFoundUsers.push(this.userGroup(user));
@@ -125,6 +139,10 @@ export class UsersListComponent implements OnInit, OnDestroy {
       password: [user.password],
       userAddress: this.fb.array([]),
     });
+  }
+
+  openUser(userId: number) {
+    this.store.dispatch(new OpenUserAction(userId));
   }
 
   onDeleteUser(id: number, userIndex: number) {
@@ -205,17 +223,16 @@ export class UsersListComponent implements OnInit, OnDestroy {
         ],
       })
     );
-    const addressIndex = this.getUserAddresses(userIndex).length - 1;
-    this.onEditUserAddress(userIndex, addressIndex);
+    // const addressIndex = this.getUserAddresses(userIndex).length - 1;
+    // this.onEditUserAddress(userIndex, addressIndex);
   }
 
   onSave(id: number, userIndex: number) {
     const body = this.getFoundUsers.at(userIndex).value;
-    const addUserAddressSub = this.userService
-      .addUserAddress(id, body)
+    const addUserAddressSub = this.store
+      .dispatch(new UpdateUserAction(id, body))
       .subscribe(
         () => {
-          this.users[userIndex] = this.getFoundUsers.at(userIndex).value;
           this.exitEditMode();
         },
         (error) => console.log(error)
@@ -223,7 +240,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
     this.subscriptions.push(addUserAddressSub);
   }
 
-  onEditUser(index: number) {
+  /*  onEditUser(index: number) {
     this.getFoundUsers.patchValue(this.users);
     this.exitEditMode();
     this.isEditUser = index;
@@ -232,6 +249,10 @@ export class UsersListComponent implements OnInit, OnDestroy {
     this.getFoundUsers.patchValue(this.users);
     this.exitEditMode();
     this.usersArray[userIndex] = addressIndex + 1;
+  }*/
+
+  onEdit(userId: number, addressIndex: number | null) {
+    this.store.dispatch(new EditUserAction(userId, addressIndex));
   }
 
   exitEditMode() {

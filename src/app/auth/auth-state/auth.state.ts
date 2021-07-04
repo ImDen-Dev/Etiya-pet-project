@@ -14,7 +14,7 @@ export interface AuthStateModel {
 @State<AuthStateModel>({
   name: 'Auth',
   defaults: {
-    isAuthenticated: false,
+    isAuthenticated: true,
     user: null,
   },
 })

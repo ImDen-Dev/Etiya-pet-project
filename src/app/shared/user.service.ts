@@ -26,12 +26,21 @@ export class UserService {
     return this.http.delete(`http://localhost:3000/users/${id}`);
   }
 
-  deleteUserAddress(id: number, body: UserInfoModel) {
-    return this.http.patch(`http://localhost:3000/users/${id}`, body);
+  deleteUserAddress(
+    id: number,
+    body: UserInfoModel
+  ): Observable<UserInfoModel> {
+    return this.http.put<UserInfoModel>(
+      `http://localhost:3000/users/${id}`,
+      body
+    );
   }
 
-  addUserAddress(id: number, body: UserInfoModel) {
-    return this.http.put(`http://localhost:3000/users/${id}`, body);
+  updateUser(id: number, body: UserInfoModel): Observable<UserInfoModel> {
+    return this.http.put<UserInfoModel>(
+      `http://localhost:3000/users/${id}`,
+      body
+    );
   }
 
   /*filterUsers(value: any, response: any[]): UserInfoModel[] {
