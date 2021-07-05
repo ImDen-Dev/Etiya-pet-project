@@ -18,7 +18,7 @@
           >
             <tr
               *ngIf="
-                (edit$ | async)?.userId === i &&
+                (edit$ | async)?.userId === user.value.id &&
                 (edit$ | async)?.addressIndex === null
               "
               [formGroupName]="i"
@@ -184,11 +184,11 @@
             </tr>
             <tr
               [formGroupName]="i"
-              style="vertical-align: middle"
+              class="user"
               (click)="openUser(user.value.id)"
               *ngIf="
-                (edit$ | async)?.userId !== i ||
-                ((edit$ | async)?.userId === i &&
+                (edit$ | async)?.userId !== user.value.id ||
+                ((edit$ | async)?.userId === user.value.id &&
                   (edit$ | async)?.addressIndex !== null)
               "
             >
@@ -201,14 +201,14 @@
                 <button
                   type="button"
                   class="btn btn-outline-success me-2"
-                  (click)="onEdit(i, null)"
+                  (click)="onEdit(user.value.id, null)"
                 >
                   Edit
                 </button>
                 <button
                   type="button"
                   class="btn btn-danger"
-                  (click)="onDelete(user.value.id, i)"
+                  (click)="onDelete(user.value.id, i, null)"
                 >
                   Delete
                 </button>
@@ -242,7 +242,7 @@
                         [formGroupName]="j"
                         style="vertical-align: middle"
                         *ngIf="
-                          (edit$ | async)?.userId !== i ||
+                          (edit$ | async)?.userId !== user.value.id ||
                           (edit$ | async)?.addressIndex !== j
                         "
                       >
@@ -257,7 +257,7 @@
                           <button
                             type="button"
                             class="btn btn-outline-success me-2 edit"
-                            (click)="onEdit(i, j)"
+                            (click)="onEdit(user.value.id, j)"
                           >
                             Edit
                           </button>
@@ -283,7 +283,7 @@
                       <tr
                         [formGroupName]="j"
                         *ngIf="
-                          (edit$ | async)?.userId === i &&
+                          (edit$ | async)?.userId === user.value.id &&
                           (edit$ | async)?.addressIndex === j
                         "
                       >

@@ -10,8 +10,14 @@ import { Select, Store } from '@ngxs/store';
 import { AuthState } from '../../../auth/auth-state/auth.state';
 import { UsersState } from '../../users-state/users.state';
 import {
+  DeleteUserAction,
+  DeleteUserAddressAction,
+  DeleteUserDefaultAction,
   EditUserAction,
+  ExitEditUserAction,
   OpenUserAction,
+  ResetStateAction,
+  SetDeleteUserInfoAction,
   UpdateUserAction,
 } from '../../users-state/users.actions';
 
@@ -22,16 +28,10 @@ import {
 })
 export class UsersListComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
-  isEditUser!: number;
-  usersArray!: number[];
   forms!: FormGroup;
   users!: UserInfoModel[];
   countries!: { name: string }[];
   isShowPopup = false;
-  deleteUserIndex!: number | undefined;
-  deleteAddressIndex!: number | undefined;
-  deleteUserId!: number | undefined;
-
   constructor(
     private userService: UserService,
     private fb: FormBuilder,
@@ -43,12 +43,12 @@ export class UsersListComponent implements OnInit, OnDestroy {
   @Select(UsersState.getUsers) users$!: Observable<UserInfoModel[]>;
   @Select(UsersState.getOpenUser) opened$!: Observable<number | null>;
   @Select(UsersState.edit) edit$!: Observable<{
+    user: UserInfoModel | null;
     userId: number | null;
     addressIndex: number | null;
   }>;
 
   ngOnInit(): void {
-    /*this.initForm();*/
     this.getUsers();
     this.getCountries();
   }
@@ -91,7 +91,6 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
   addUserToForm(users: UserInfoModel[]) {
     this.initForm();
-    this.usersArray = new Array(users.length).fill(0);
     users.forEach((user, index) => {
       this.getFoundUsers.push(this.userGroup(user));
       this.addAddressesToUser(user.userAddress, index);
@@ -145,29 +144,15 @@ export class UsersListComponent implements OnInit, OnDestroy {
     this.store.dispatch(new OpenUserAction(userId));
   }
 
-  onDeleteUser(id: number, userIndex: number) {
-    const deleteUserSub = this.userService.deleteUser(id).subscribe(
-      () => {
-        this.getFoundUsers.removeAt(userIndex);
-      },
-      (error) => console.log(error)
-    );
-    this.subscriptions.push(deleteUserSub);
-  }
-
-  onDeleteAddress(id: number, userIndex: number, addressIndex: number) {
-    const userValue: UserInfoModel = this.getFoundUsers.at(userIndex).value;
-    userValue.userAddress.splice(addressIndex, addressIndex + 1);
-    const deleteUserAddressSub = this.userService
-      .deleteUserAddress(id, userValue)
-      .subscribe(
-        () => {
-          this.removeAddressFromForm(userIndex, addressIndex);
-          this.users = this.getFoundUsers.value;
-        },
-        (error) => console.log(error)
-      );
-    this.subscriptions.push(deleteUserAddressSub);
+  onDelete(id: number, userIndex: number, addressIndex: number | null) {
+    this.isShowPopup = true;
+    if (addressIndex) {
+      const userValue: UserInfoModel = this.getFoundUsers.at(userIndex).value;
+      userValue.userAddress.splice(addressIndex, addressIndex + 1);
+      this.store.dispatch(new SetDeleteUserInfoAction(id, userValue));
+    } else {
+      this.store.dispatch(new SetDeleteUserInfoAction(id, null));
+    }
   }
 
   removeAddressFromForm(userIndex: number, addressIndex: number) {
@@ -176,38 +161,19 @@ export class UsersListComponent implements OnInit, OnDestroy {
     );
   }
 
-  onDelete(id: number, userIndex: number, addressIndex?: number) {
-    this.isShowPopup = true;
-    this.deleteUserId = id;
-    this.deleteUserIndex = userIndex;
-    if (addressIndex !== undefined) this.deleteAddressIndex = addressIndex;
-  }
-
   delete() {
-    if (
-      this.deleteUserId !== undefined &&
-      this.deleteUserIndex !== undefined &&
-      this.deleteAddressIndex !== undefined
-    ) {
-      this.onDeleteAddress(
-        this.deleteUserId,
-        this.deleteUserIndex,
-        this.deleteAddressIndex
-      );
-    } else if (
-      this.deleteUserId !== undefined &&
-      this.deleteUserIndex !== undefined
-    ) {
-      this.onDeleteUser(this.deleteUserId, this.deleteUserIndex);
+    const { user } = this.store.selectSnapshot(UsersState.deleteInfo);
+    if (!user) {
+      this.store.dispatch(new DeleteUserAction());
+    } else {
+      this.store.dispatch(new DeleteUserAddressAction());
     }
-    this.onCancelDelete();
+    this.isShowPopup = false;
   }
 
   onCancelDelete() {
     this.isShowPopup = false;
-    this.deleteUserId = undefined;
-    this.deleteUserIndex = undefined;
-    this.deleteAddressIndex = undefined;
+    this.store.dispatch(new DeleteUserDefaultAction());
   }
 
   onAddNewAddressField(userIndex: number) {
@@ -223,8 +189,8 @@ export class UsersListComponent implements OnInit, OnDestroy {
         ],
       })
     );
-    // const addressIndex = this.getUserAddresses(userIndex).length - 1;
-    // this.onEditUserAddress(userIndex, addressIndex);
+    const addressIndex = this.getUserAddresses(userIndex).length - 1;
+    this.onEditUserAddress(userIndex, addressIndex);
   }
 
   onSave(id: number, userIndex: number) {
@@ -240,24 +206,17 @@ export class UsersListComponent implements OnInit, OnDestroy {
     this.subscriptions.push(addUserAddressSub);
   }
 
-  /*  onEditUser(index: number) {
-    this.getFoundUsers.patchValue(this.users);
-    this.exitEditMode();
-    this.isEditUser = index;
-  }
   onEditUserAddress(userIndex: number, addressIndex: number) {
-    this.getFoundUsers.patchValue(this.users);
-    this.exitEditMode();
-    this.usersArray[userIndex] = addressIndex + 1;
-  }*/
+    this.onEdit(this.users[userIndex].id as number, addressIndex);
+  }
 
   onEdit(userId: number, addressIndex: number | null) {
+    this.getFoundUsers.patchValue(this.users);
     this.store.dispatch(new EditUserAction(userId, addressIndex));
   }
 
   exitEditMode() {
-    this.usersArray.fill(0);
-    this.isEditUser = NaN;
+    this.store.dispatch(new ExitEditUserAction());
   }
 
   onCancel(userIndex: number, addressIndex?: number) {
@@ -269,9 +228,11 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
     this.getFoundUsers.at(userIndex).patchValue(this.users[userIndex]);
     this.exitEditMode();
+    this.store.dispatch(new DeleteUserDefaultAction());
   }
 
   ngOnDestroy() {
+    this.store.dispatch(new ResetStateAction());
     if (this.subscriptions.length > 0) {
       this.subscriptions.map((sub) => sub.unsubscribe());
     }

@@ -35,8 +35,28 @@ export class UpdateUserAction {
   constructor(public id: number, public user: UserInfoModel) {}
 }
 
-export class UpdateUserAddressAction {}
+export class SetDeleteUserInfoAction {
+  static readonly desc = 'Delete user or user address';
+  static readonly type = '[Users] Set Delete User info';
+  constructor(public userId: number, public user: UserInfoModel | null) {}
+}
 
-export class DeleteUserAction {}
+export class DeleteUserDefaultAction {
+  static readonly desc = 'Set default value for deleting';
+  static readonly type = '[Users] Default Deleting Value';
+}
 
-export class DeleteUserAddressAction {}
+export class DeleteUserAction {
+  static readonly desc = 'Delete user';
+  static readonly type = '[Users] Delete user';
+}
+
+export class DeleteUserAddressAction {
+  static readonly desc = 'Delete user address';
+  static readonly type = '[Users] Delete user address';
+}
+
+export class ResetStateAction {
+  static readonly desc = 'Reset state to default';
+  static readonly type = '[Users] Reset State';
+}

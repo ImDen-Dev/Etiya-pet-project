@@ -10,7 +10,7 @@
       "password": "123456",
       "userAddress": [
         {
-          "addressType": "Home Address",
+          "addressType": "Billing Address",
           "address": "Prospekt",
           "city": "Chernivtci",
           "country": "Ukraine",
@@ -18,7 +18,7 @@
         },
         {
           "addressType": "Shipping Address",
-          "address": "le",
+          "address": "Golovna",
           "city": "Lviv",
           "country": "Austria",
           "postalCode": "50185"
@@ -28,7 +28,7 @@
     {
       "firstName": "Matvii",
       "lastName": "Matvii",
-      "userName": "Mat",
+      "userName": "Matviy",
       "phone": "1234567897",
       "email": "Matvii@mat",
       "id": 3,
@@ -39,7 +39,7 @@
           "address": "Kulp",
           "city": "Lviv",
           "country": "Ukraine",
-          "postalCode": "58005"
+          "postalCode": "5806"
         }
       ]
     },
@@ -62,38 +62,27 @@
       ]
     },
     {
-      "firstName": "Mavrodi",
-      "lastName": "mmm",
-      "userName": "Mavr",
-      "phone": "2352345245234",
-      "email": "mavrodi@mmm.com",
-      "id": 6,
-      "password": "123456",
-      "userAddress": [
-        {
-          "addressType": "Billing Address",
-          "address": "fasddfasdf",
-          "city": "Kharkov",
-          "country": "Australia",
-          "postalCode": "1324654"
-        }
-      ]
-    },
-    {
-      "firstName": "Karina",
-      "lastName": "Krupa",
-      "userName": "Krupskaja",
-      "phone": "0994524831",
-      "email": "krupa@gmail.com",
-      "id": 7,
+      "firstName": "sgfdsgfdg",
+      "lastName": "sfgdsdfgsd",
+      "userName": "gfsdfgsdfg",
+      "phone": "5234523452345",
+      "email": "asdfgasd@dasdf",
+      "id": 5,
       "password": "123456",
       "userAddress": [
         {
           "addressType": "Home Address",
-          "address": "Bulvar",
-          "city": "Chernivtci",
-          "country": "Ukraine",
-          "postalCode": "58002"
+          "address": "fgdsfdg",
+          "city": "sfdgsdfg",
+          "country": "Bahrain",
+          "postalCode": "234523452345"
+        },
+        {
+          "addressType": "Home Address",
+          "address": "sfdgfdsgf",
+          "city": "ebvbv",
+          "country": "Australia",
+          "postalCode": "6534653456"
         }
       ]
     }
