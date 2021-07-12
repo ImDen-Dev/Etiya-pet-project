@@ -1,5 +1,5 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { UserInfoModel } from '../../shared/models/user-info.model';
+import { UserInfoModel } from '../../models/user-info.model';
 import { Injectable } from '@angular/core';
 import {
   SetDeleteUserInfoAction,
@@ -14,7 +14,7 @@ import {
   ResetStateAction,
 } from './users.actions';
 import { Observable } from 'rxjs';
-import { UserService } from '../../shared/services/user.service';
+import { UserService } from '../../services/user.service';
 import { map, tap } from 'rxjs/operators';
 
 export interface UsersStateModel {

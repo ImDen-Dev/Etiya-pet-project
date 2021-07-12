@@ -6,8 +6,8 @@ import { AddressModel } from '../shared/models/address.model';
 import { Router } from '@angular/router';
 import { UserInfoModel } from '../shared/models/user-info.model';
 import { Store } from '@ngxs/store';
-import { CreateUserAction } from '../auth/auth-state/auth.actions';
-import { AuthState } from '../auth/auth-state/auth.state';
+import { CreateUserAction } from '../shared/states/auth-state/auth.actions';
+import { AuthState } from '../shared/states/auth-state/auth.state';
 
 @Component({
   selector: 'app-create-user',

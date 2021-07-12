@@ -11,18 +11,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { CreateUserComponent } from './create-user/create-user.component';
-import { MainComponent } from './users-list/main.component';
+import { SearchComponent } from './search/search.component';
 import { UserInfoComponent } from './user-info/user-info.component';
-import { FindUserComponent } from './users-list/find-user/find-user.component';
+import { FindUserComponent } from './search/find-user/find-user.component';
 import { HeaderComponent } from './ui/header/header.component';
 import { FooterComponent } from './ui/footer/footer.component';
 import { SidebarComponent } from './ui/sidebar/sidebar.component';
-import { UsersListComponent } from './users-list/find-user/users-list/users-list.component';
+import { UsersListComponent } from './search/find-user/users-list/users-list.component';
 
 import { TableCollapseDirective } from './shared/directives/table-collapse.directive';
 
-import { AuthState } from './auth/auth-state/auth.state';
-import { UsersState } from './users-list/users-state/users.state';
+import { AuthState } from './shared/states/auth-state/auth.state';
+import { UsersState } from './shared/states/users-state/users.state';
 
 import { environment } from '../environments/environment';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
@@ -32,7 +32,7 @@ import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
     AppComponent,
     LoginComponent,
     CreateUserComponent,
-    MainComponent,
+    SearchComponent,
     UserInfoComponent,
     FindUserComponent,
     HeaderComponent,

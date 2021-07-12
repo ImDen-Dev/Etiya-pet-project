@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { LoginAction } from '../auth-state/auth.actions';
-import { AuthState } from '../auth-state/auth.state';
+import { LoginAction } from '../../shared/states/auth-state/auth.actions';
+import { AuthState } from '../../shared/states/auth-state/auth.state';
 import { Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 

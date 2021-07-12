@@ -5,7 +5,7 @@ import { AuthService } from '../shared/services/auth.service';
 import { Router } from '@angular/router';
 import { UserInfoModel } from '../shared/models/user-info.model';
 import { Store } from '@ngxs/store';
-import { AuthState } from '../auth/auth-state/auth.state';
+import { AuthState } from '../shared/states/auth-state/auth.state';
 
 @Component({
   selector: 'app-user-info',

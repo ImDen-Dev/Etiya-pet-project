@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../shared/services/auth.service';
 import { Select } from '@ngxs/store';
-import { AuthState } from '../../auth/auth-state/auth.state';
+import { AuthState } from '../../shared/states/auth-state/auth.state';
 import { Observable } from 'rxjs';
 
 @Component({

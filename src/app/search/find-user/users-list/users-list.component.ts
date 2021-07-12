@@ -7,8 +7,8 @@ import { AddressModel } from '../../../shared/models/address.model';
 import { AuthService } from '../../../shared/services/auth.service';
 import { Observable, Subscription } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
-import { AuthState } from '../../../auth/auth-state/auth.state';
-import { UsersState } from '../../users-state/users.state';
+import { AuthState } from '../../../shared/states/auth-state/auth.state';
+import { UsersState } from '../../../shared/states/users-state/users.state';
 import {
   DeleteUserAction,
   DeleteUserAddressAction,
@@ -19,7 +19,7 @@ import {
   ResetStateAction,
   SetDeleteUserInfoAction,
   UpdateUserAction,
-} from '../../users-state/users.actions';
+} from '../../../shared/states/users-state/users.actions';
 
 @Component({
   selector: 'app-users-list',

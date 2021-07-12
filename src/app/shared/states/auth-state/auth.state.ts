@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { UserInfoModel } from '../../shared/models/user-info.model';
+import { UserInfoModel } from '../../models/user-info.model';
 import { CreateUserAction, LoginAction, LogoutAction } from './auth.actions';
-import { AuthService } from '../../shared/services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 

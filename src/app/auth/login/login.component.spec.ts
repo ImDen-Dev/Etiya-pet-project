@@ -4,9 +4,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxsModule, Store } from '@ngxs/store';
-import { AuthState } from '../auth-state/auth.state';
+import { AuthState } from '../../shared/states/auth-state/auth.state';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { LoginAction } from '../auth-state/auth.actions';
+import { LoginAction } from '../../shared/states/auth-state/auth.actions';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
