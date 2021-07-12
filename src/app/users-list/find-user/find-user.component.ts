@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../shared/user.service';
+import { UserService } from '../../shared/services/user.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { FindUsersAction, GetUsersAction } from '../users-state/users.actions';

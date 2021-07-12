@@ -5,6 +5,7 @@ import { Store } from '@ngxs/store';
 import { LoginAction } from '../auth-state/auth.actions';
 import { AuthState } from '../auth-state/auth.state';
 import { Subscription } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -36,14 +37,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.sub = this.store
-      .dispatch(new LoginAction(this.loginForm.value))
-      .subscribe(() => {
-        const isAuth = this.store.selectSnapshot(AuthState.isAuth);
-        isAuth
-          ? this.router.navigate(['user-info'])
-          : this.router.navigate(['sign-up']);
-      });
+    this.store.dispatch(new LoginAction(this.loginForm.value)).subscribe(() => {
+      const isAuth = this.store.selectSnapshot(AuthState.isAuth);
+      isAuth
+        ? this.router.navigate(['user-info'])
+        : this.router.navigate(['create-user']);
+    });
   }
 
   ngOnDestroy() {

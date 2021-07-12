@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -10,28 +10,28 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
-import { SignUpComponent } from './auth/sign-up/sign-up.component';
-import { MainComponent } from './main/main.component';
+import { CreateUserComponent } from './create-user/create-user.component';
+import { MainComponent } from './users-list/main.component';
 import { UserInfoComponent } from './user-info/user-info.component';
-import { FindUserComponent } from './main/find-user/find-user.component';
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { UsersListComponent } from './main/find-user/users-list/users-list.component';
+import { FindUserComponent } from './users-list/find-user/find-user.component';
+import { HeaderComponent } from './ui/header/header.component';
+import { FooterComponent } from './ui/footer/footer.component';
+import { SidebarComponent } from './ui/sidebar/sidebar.component';
+import { UsersListComponent } from './users-list/find-user/users-list/users-list.component';
 
-import { TableCollapseDirective } from './shared/table-collapse.directive';
-import { EditDirective } from './shared/edit.directive';
+import { TableCollapseDirective } from './shared/directives/table-collapse.directive';
 
 import { AuthState } from './auth/auth-state/auth.state';
-import { UsersState } from './main/users-state/users.state';
+import { UsersState } from './users-list/users-state/users.state';
 
 import { environment } from '../environments/environment';
+import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    SignUpComponent,
+    CreateUserComponent,
     MainComponent,
     UserInfoComponent,
     FindUserComponent,
@@ -40,7 +40,6 @@ import { environment } from '../environments/environment';
     SidebarComponent,
     UsersListComponent,
     TableCollapseDirective,
-    EditDirective,
   ],
   imports: [
     BrowserModule,
@@ -53,7 +52,9 @@ import { environment } from '../environments/environment';
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

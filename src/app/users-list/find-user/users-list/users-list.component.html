@@ -171,7 +171,7 @@
                       !getFoundUsers.at(i).get('phone')?.errors?.pattern
                     "
                   >
-                    Phone number must be between 10 and 13 digits
+                    Phone number must be between 10 and 17 digits
                   </p>
                   <p
                     class="text-danger"
@@ -295,13 +295,13 @@
                             <option disabled selected>
                               Choose address type
                             </option>
-                            <option value="Shipping Address">
+                            <option value="Shipment_Address">
                               Shipment Address
                             </option>
-                            <option value="Billing Address">
+                            <option value="Billing_Address">
                               Billing Address
                             </option>
-                            <option value="Home Address">Home Address</option>
+                            <option value="Home_Address">Home Address</option>
                           </select>
                         </td>
                         <td *ngIf="isAuth$ | async">

@@ -1,5 +1,5 @@
 import { SearchModel } from '../search.model';
-import { UserInfoModel } from '../../shared/user-info.model';
+import { UserInfoModel } from '../../shared/models/user-info.model';
 
 export class GetUsersAction {
   static readonly desc = 'Get all found users';

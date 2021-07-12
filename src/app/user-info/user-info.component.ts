@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UserModel } from '../auth/user.model';
-import { AddressModel } from '../auth/address.model';
-import { AuthService } from '../auth/auth.service';
+import { UserModel } from '../shared/models/user.model';
+import { AddressModel } from '../shared/models/address.model';
+import { AuthService } from '../shared/services/auth.service';
 import { Router } from '@angular/router';
-import { UserInfoModel } from '../shared/user-info.model';
+import { UserInfoModel } from '../shared/models/user-info.model';
 import { Store } from '@ngxs/store';
 import { AuthState } from '../auth/auth-state/auth.state';
 

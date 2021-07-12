@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { UserService } from '../../../shared/user.service';
-import { UserInfoModel } from '../../../shared/user-info.model';
-import { AddressModel } from '../../../auth/address.model';
-import { AuthService } from '../../../auth/auth.service';
+import { UserService } from '../../../shared/services/user.service';
+import { UserInfoModel } from '../../../shared/models/user-info.model';
+import { AddressModel } from '../../../shared/models/address.model';
+import { AuthService } from '../../../shared/services/auth.service';
 import { Observable, Subscription } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { AuthState } from '../../../auth/auth-state/auth.state';
@@ -129,8 +129,8 @@ export class UsersListComponent implements OnInit, OnDestroy {
         [
           Validators.required,
           Validators.minLength(10),
-          Validators.maxLength(13),
-          Validators.pattern(/^[0-9]+$/),
+          Validators.maxLength(17),
+          Validators.pattern(/[-+()0-9]/g),
         ],
       ],
       email: [user.email, [Validators.required, Validators.email]],
@@ -146,7 +146,8 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
   onDelete(id: number, userIndex: number, addressIndex: number | null) {
     this.isShowPopup = true;
-    if (addressIndex) {
+
+    if (addressIndex !== null) {
       const userValue: UserInfoModel = this.getFoundUsers.at(userIndex).value;
       userValue.userAddress.splice(addressIndex, addressIndex + 1);
       this.store.dispatch(new SetDeleteUserInfoAction(id, userValue));
@@ -183,10 +184,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
         address: [null, Validators.required],
         city: [null, Validators.required],
         country: [null, Validators.required],
-        postalCode: [
-          null,
-          [Validators.required, Validators.pattern(/^[0-9]+$/)],
-        ],
+        postalCode: [null, [Validators.required, Validators.pattern(/[0-9]/g)]],
       })
     );
     const addressIndex = this.getUserAddresses(userIndex).length - 1;

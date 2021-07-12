@@ -1,5 +1,5 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { UserInfoModel } from '../../shared/user-info.model';
+import { UserInfoModel } from '../../shared/models/user-info.model';
 import { Injectable } from '@angular/core';
 import {
   SetDeleteUserInfoAction,
@@ -14,7 +14,7 @@ import {
   ResetStateAction,
 } from './users.actions';
 import { Observable } from 'rxjs';
-import { UserService } from '../../shared/user.service';
+import { UserService } from '../../shared/services/user.service';
 import { map, tap } from 'rxjs/operators';
 
 export interface UsersStateModel {
@@ -115,7 +115,7 @@ export class UsersState {
     action: UpdateUserAction
   ) {
     return this.userService.updateUser(action.id, action.user).pipe(
-      tap((value) => {
+      tap(() => {
         const updatesUsers = [...getState().users];
         const userIndex = updatesUsers.findIndex(
           (user) => user.id === action.id
@@ -164,10 +164,7 @@ export class UsersState {
     updatedUsers[userIndex] = updatedUser;
     console.log(deleteInfo);
     return this.userService
-      .deleteUserAddress(
-        deleteInfo.userId as number,
-        deleteInfo.user as UserInfoModel
-      )
+      .updateUser(deleteInfo.userId as number, deleteInfo.user as UserInfoModel)
       .subscribe(() => {
         patchState({
           users: [...updatedUsers],

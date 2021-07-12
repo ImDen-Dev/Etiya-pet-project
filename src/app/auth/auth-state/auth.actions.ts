@@ -1,4 +1,4 @@
-import { UserInfoModel } from '../../shared/user-info.model';
+import { UserInfoModel } from '../../shared/models/user-info.model';
 
 export class LoginAction {
   static readonly desc = 'Login user';

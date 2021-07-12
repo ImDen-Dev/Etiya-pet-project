@@ -214,9 +214,9 @@
           formControlName="addressType"
         >
           <option disabled selected>Choose address type</option>
-          <option value="Shipping Address">Shipment Address</option>
-          <option value="Billing Address">Billing Address</option>
-          <option value="Home Address">Home Address</option>
+          <option value="Shipment_Address">Shipment Address</option>
+          <option value="Billing_Address">Billing Address</option>
+          <option value="Home_Address">Home Address</option>
         </select>
         <div
           *ngIf="
@@ -331,6 +331,12 @@
             *ngIf="getAddressControls[i].get('postalCode')?.errors?.pattern"
           >
             Postal code can only be digits
+          </p>
+          <p
+            class="text-danger"
+            *ngIf="getAddressControls[i].get('postalCode')?.errors?.maxlength "
+          >
+            Postal code  max length 5
           </p>
         </div>
       </div>

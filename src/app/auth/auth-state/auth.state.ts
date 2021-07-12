@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { UserInfoModel } from '../../shared/user-info.model';
+import { UserInfoModel } from '../../shared/models/user-info.model';
 import { CreateUserAction, LoginAction, LogoutAction } from './auth.actions';
-import { AuthService } from '../auth.service';
-import { map, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { AuthService } from '../../shared/services/auth.service';
+import { catchError, switchMap, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 export interface AuthStateModel {
   isAuthenticated: boolean;
+  token: string;
   user: UserInfoModel | null;
 }
 
@@ -15,6 +16,7 @@ export interface AuthStateModel {
   name: 'Auth',
   defaults: {
     isAuthenticated: false,
+    token: '',
     user: null,
   },
 })
@@ -28,26 +30,36 @@ export class AuthState {
   }
 
   @Selector()
+  static getUserToken(state: AuthStateModel) {
+    return state.token;
+  }
+
+  @Selector()
   static getUser(state: AuthStateModel) {
     return state.user;
   }
 
   @Action(LoginAction)
-  login(
-    ctx: StateContext<AuthStateModel>,
-    action: LoginAction
-  ): Observable<UserInfoModel | null> {
+  login({ patchState }: StateContext<AuthStateModel>, action: LoginAction) {
     return this.authService.login(action.payload).pipe(
-      map((loginResult) =>
-        loginResult.length > 0 ? (loginResult[0] as UserInfoModel) : null
-      ),
-      tap((user) => {
-        if (user) {
-          ctx.patchState({
-            isAuthenticated: true,
-            user: { ...user },
-          });
+      catchError((err) => {
+        return of({ token: '' });
+      }),
+      switchMap((req) => {
+        patchState({
+          token: req.token,
+        });
+        if (req.token.length > 0) {
+          return this.authService.getUser(action.payload.email);
+        } else {
+          return of(null);
         }
+      }),
+      tap((user: UserInfoModel | null) => {
+        patchState({
+          isAuthenticated: !!user,
+          user: user ? { ...user } : null,
+        });
       })
     );
   }
@@ -56,6 +68,7 @@ export class AuthState {
   logout({ patchState }: StateContext<AuthStateModel>) {
     patchState({
       isAuthenticated: false,
+      token: '',
       user: null,
     });
   }
@@ -65,13 +78,6 @@ export class AuthState {
     { patchState }: StateContext<AuthStateModel>,
     action: CreateUserAction
   ) {
-    return this.authService.createUser(action.payload).pipe(
-      tap((user) => {
-        patchState({
-          isAuthenticated: true,
-          user: { ...user },
-        });
-      })
-    );
+    return this.authService.createUser(action.payload);
   }
 }

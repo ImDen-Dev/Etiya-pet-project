@@ -1,19 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserModel } from '../user.model';
-import { AuthService } from '../auth.service';
-import { AddressModel } from '../address.model';
+import { UserModel } from '../shared/models/user.model';
+import { AuthService } from '../shared/services/auth.service';
+import { AddressModel } from '../shared/models/address.model';
 import { Router } from '@angular/router';
-import { UserInfoModel } from '../../shared/user-info.model';
+import { UserInfoModel } from '../shared/models/user-info.model';
 import { Store } from '@ngxs/store';
-import { CreateUserAction } from '../auth-state/auth.actions';
+import { CreateUserAction } from '../auth/auth-state/auth.actions';
+import { AuthState } from '../auth/auth-state/auth.state';
 
 @Component({
-  selector: 'app-sign-up',
-  templateUrl: './sign-up.component.html',
-  styleUrls: ['./sign-up.component.scss'],
+  selector: 'app-create-user',
+  templateUrl: './create-user.component.html',
+  styleUrls: ['./create-user.component.scss'],
 })
-export class SignUpComponent implements OnInit {
+export class CreateUserComponent implements OnInit {
   page = 'mainInfo';
   mainInfo!: FormGroup;
   addressInfo!: FormGroup;
@@ -44,9 +45,9 @@ export class SignUpComponent implements OnInit {
           null,
           [
             Validators.required,
-            Validators.pattern(/^[0-9]+$/),
+            Validators.pattern(/[-+()0-9]/g),
             Validators.minLength(10),
-            Validators.maxLength(13),
+            Validators.maxLength(17),
           ],
         ],
         email: [null, [Validators.required, Validators.email]],
@@ -75,7 +76,14 @@ export class SignUpComponent implements OnInit {
       address: [null, Validators.required],
       city: [null, Validators.required],
       country: [null, Validators.required],
-      postalCode: [null, [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+      postalCode: [
+        null,
+        [
+          Validators.required,
+          Validators.pattern(/[0-9]/g),
+          Validators.maxLength(5),
+        ],
+      ],
     });
   }
 
@@ -125,7 +133,10 @@ export class SignUpComponent implements OnInit {
     const user = <UserInfoModel>{ ...userInfo, ...addressInfo };
 
     this.store.dispatch(new CreateUserAction(user)).subscribe(() => {
-      this.router.navigate(['user-info']);
+      const isAuth = this.store.selectSnapshot(AuthState.isAuth);
+      isAuth
+        ? this.router.navigate(['user-info'])
+        : this.router.navigate(['login']);
     });
   }
 }
