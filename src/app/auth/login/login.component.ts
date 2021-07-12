@@ -1,10 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { LoginAction } from '../auth-state/auth.actions';
-import { switchMap } from 'rxjs/operators';
 import { AuthState } from '../auth-state/auth.state';
 import { Subscription } from 'rxjs';
 
@@ -18,7 +16,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   sub!: Subscription;
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
     private router: Router,
     private store: Store
   ) {}
