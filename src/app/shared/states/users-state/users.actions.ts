@@ -6,11 +6,11 @@ export class GetUsersAction {
   static readonly type = '[Users] Get Users';
 }
 
-export class FindUsersAction {
+/*export class FindUsersAction {
   static readonly desc = 'Find users';
   static readonly type = '[Users] Find Users';
   constructor(public payload: SearchModel) {}
-}
+}*/
 
 export class OpenUserAction {
   static readonly desc = 'Toggle user when click';

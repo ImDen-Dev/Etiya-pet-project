@@ -20,6 +20,7 @@ import {
   SetDeleteUserInfoAction,
   UpdateUserAction,
 } from '../../../shared/states/users-state/users.actions';
+import { SearchState } from '../../../shared/states/search-state/search.state';
 
 @Component({
   selector: 'app-users-list',
@@ -40,7 +41,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
   ) {}
 
   @Select(AuthState.isAuth) isAuth$!: Observable<boolean>;
-  @Select(UsersState.getUsers) users$!: Observable<UserInfoModel[]>;
+  @Select(SearchState.getUsers) users$!: Observable<UserInfoModel[]>;
   @Select(UsersState.getOpenUser) opened$!: Observable<number | null>;
   @Select(UsersState.edit) edit$!: Observable<{
     user: UserInfoModel | null;

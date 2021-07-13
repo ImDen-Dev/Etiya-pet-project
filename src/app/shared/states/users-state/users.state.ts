@@ -5,7 +5,6 @@ import {
   SetDeleteUserInfoAction,
   EditUserAction,
   ExitEditUserAction,
-  FindUsersAction,
   OpenUserAction,
   UpdateUserAction,
   DeleteUserAction,
@@ -13,9 +12,8 @@ import {
   DeleteUserDefaultAction,
   ResetStateAction,
 } from './users.actions';
-import { Observable } from 'rxjs';
 import { UserService } from '../../services/user.service';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
 export interface UsersStateModel {
   users: UserInfoModel[];
@@ -40,10 +38,6 @@ export interface UsersStateModel {
 @Injectable()
 export class UsersState {
   constructor(private userService: UserService) {}
-  @Selector()
-  static getUsers({ users }: UsersStateModel): UserInfoModel[] {
-    return users;
-  }
 
   @Selector()
   static getOpenUser({ openUser }: UsersStateModel): number | null {
@@ -65,21 +59,6 @@ export class UsersState {
     user: UserInfoModel | null;
   } {
     return deleteInfo;
-  }
-
-  @Action(FindUsersAction)
-  setUsers(
-    { getState, patchState }: StateContext<UsersStateModel>,
-    action: FindUsersAction
-  ): Observable<UserInfoModel[]> {
-    return this.userService.findUsers().pipe(
-      map((response) => this.filterUsers(action.payload, response)),
-      tap((users) => {
-        patchState({
-          users: [...users],
-        });
-      })
-    );
   }
 
   @Action(OpenUserAction)
@@ -188,19 +167,5 @@ export class UsersState {
       edit: { user: null, userId: null, addressIndex: null },
       deleteInfo: { userId: null, user: null },
     });
-  }
-
-  private filterUsers(value: any, response: any[]): UserInfoModel[] {
-    Object.keys(value).forEach((key) => {
-      if (value[key] === null) {
-        delete value[key];
-      }
-    });
-    if (Object.keys(value).length === 0) return response;
-    return response.filter((user) =>
-      Object.keys(value).every((key) =>
-        user[key].toLowerCase().includes(value[key].toLowerCase())
-      )
-    );
   }
 }

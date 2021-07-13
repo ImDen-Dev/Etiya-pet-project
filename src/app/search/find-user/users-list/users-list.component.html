@@ -4,11 +4,21 @@
       <table class="table table-striped user-select-none">
         <thead>
           <tr>
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">User Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Phone</th>
+            <th scope="col">
+              <span class="material-icons">expand_less</span> First Name
+            </th>
+            <th scope="col">
+              <span class="material-icons">expand_less</span> Last Name
+            </th>
+            <th scope="col">
+              <span class="material-icons">expand_less</span> User Name
+            </th>
+            <th scope="col">
+              <span class="material-icons">expand_less</span> Email
+            </th>
+            <th scope="col">
+              <span class="material-icons">expand_less</span> Phone
+            </th>
             <th scope="col" *ngIf="isAuth$ | async">Actions</th>
           </tr>
         </thead>
@@ -465,7 +475,6 @@
       </table>
     </form>
   </div>
-  <div class="text-center" *ngIf="users.length <= 0">Users not found yet</div>
 </div>
 <div
   class="modal fade"

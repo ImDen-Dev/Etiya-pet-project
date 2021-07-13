@@ -59,4 +59,10 @@
   </form>
   <hr />
 </div>
-<app-users-list></app-users-list>
+<ng-template [ngIf]="users.length > 0">
+  <app-users-list></app-users-list>
+  <app-pagination></app-pagination>
+</ng-template>
+<ng-template [ngIf]="users.length <= 0">
+  <div class="text-center" *ngIf="users.length <= 0">Users not found yet</div>
+</ng-template>

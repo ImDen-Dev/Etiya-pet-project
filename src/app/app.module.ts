@@ -26,6 +26,8 @@ import { UsersState } from './shared/states/users-state/users.state';
 
 import { environment } from '../environments/environment';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
+import { PaginationComponent } from './search/pagination/pagination.component';
+import { SearchState } from './shared/states/search-state/search.state';
 
 @NgModule({
   declarations: [
@@ -40,13 +42,14 @@ import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
     SidebarComponent,
     UsersListComponent,
     TableCollapseDirective,
+    PaginationComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgxsModule.forRoot([AuthState, UsersState], {
+    NgxsModule.forRoot([AuthState, UsersState, SearchState], {
       developmentMode: !environment.production,
     }),
     NgxsReduxDevtoolsPluginModule.forRoot(),

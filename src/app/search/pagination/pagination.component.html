@@ -1,0 +1,70 @@
+<div class="container">
+  <div class="row">
+    <div class="col-8">
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item" [ngClass]="{ disabled: currentPage === 0 }">
+            <button
+              class="page-link"
+              aria-label="Previous"
+              [disabled]="currentPage === 0"
+              (click)="onNextPrev(false)"
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </button>
+          </li>
+          <ng-container *ngFor="let _ of countPages; let i = index">
+            <li
+              *ngIf="currentPage + indent >= i && currentPage - indent <= i"
+              class="page-item"
+              [ngClass]="{ active: currentPage === i }"
+              (click)="onChangePage(i)"
+            >
+              <button
+                *ngIf="currentPage + indent !== i && currentPage - indent !== i"
+                class="page-link"
+              >
+                {{ i + 1 }}
+              </button>
+              <button
+                *ngIf="currentPage + indent === i || currentPage - indent === i"
+                class="page-link material-icons"
+              >
+                more_horiz
+              </button>
+            </li>
+          </ng-container>
+          <li
+            class="page-item"
+            [ngClass]="{ disabled: currentPage === countPages.length - 1 }"
+          >
+            <button
+              class="page-link"
+              aria-label="Next"
+              [disabled]="currentPage === countPages.length - 1"
+              (click)="onNextPrev(true)"
+            >
+              <span aria-hidden="true">&raquo;</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="col-4">
+      <select
+        class="form-select form-select-sm"
+        (click)="onChangePageSize($event)"
+      >
+        <option disabled>Users count</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option selected value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+      </select>
+    </div>
+  </div>
+</div>

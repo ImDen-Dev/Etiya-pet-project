@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  dbUrl: 'https://mini-group-app.herokuapp.com',
+  // dbUrl: 'https://mini-group-app.herokuapp.com',
+  dbUrl: 'https://tast-attempt-2.herokuapp.com',
 };
 
 /*

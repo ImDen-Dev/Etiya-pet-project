@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../shared/services/user.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Store } from '@ngxs/store';
-import {
-  FindUsersAction,
-  GetUsersAction,
-} from '../../shared/states/users-state/users.actions';
+import { Select, Store } from '@ngxs/store';
+import { FilterUsersAction } from '../../shared/states/search-state/search.actions';
+import { SearchState } from '../../shared/states/search-state/search.state';
+import { Observable } from 'rxjs';
+import { UserInfoModel } from '../../shared/models/user-info.model';
 
 @Component({
   selector: 'app-find-user',
@@ -14,14 +13,15 @@ import {
 })
 export class FindUserComponent implements OnInit {
   findUserForm!: FormGroup;
-  constructor(
-    private userService: UserService,
-    private fb: FormBuilder,
-    private store: Store
-  ) {}
+  users: UserInfoModel[] = [];
+
+  @Select(SearchState.getUsers) users$!: Observable<UserInfoModel[]>;
+
+  constructor(private fb: FormBuilder, private store: Store) {}
 
   ngOnInit(): void {
     this.initFindUserForm();
+    this.users$.subscribe((users) => (this.users = users));
   }
 
   initFindUserForm() {
@@ -35,6 +35,6 @@ export class FindUserComponent implements OnInit {
   }
 
   onSubmit() {
-    this.store.dispatch(new FindUsersAction(this.findUserForm.value));
+    this.store.dispatch(new FilterUsersAction(this.findUserForm.value));
   }
 }
