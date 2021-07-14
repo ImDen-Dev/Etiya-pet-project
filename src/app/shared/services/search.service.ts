@@ -12,16 +12,16 @@ export class SearchService {
   filterUsers(
     pageNum: number,
     pageSize: number,
-    searchParam: string
+    searchParam: string,
+    sortBy: string,
+    sortOrder: string
   ): Observable<UserInfoModel[]> {
     return this.http.get<UserInfoModel[]>(
-      `${environment.dbUrl}/api/user/all?pageNum=${pageNum}&pageSize=${pageSize}&search=${searchParam}`
+      `${environment.dbUrl}/api/user/all?pageNum=${pageNum}&sortBy=${sortBy}&sortOrder=${sortOrder}&pageSize=${pageSize}&${searchParam}`
     );
   }
 
   totalUsersCount(params: string) {
-    return this.http.get(
-      `${environment.dbUrl}/api/user/count?search=${params}`
-    );
+    return this.http.get(`${environment.dbUrl}/api/user/count?${params}`);
   }
 }

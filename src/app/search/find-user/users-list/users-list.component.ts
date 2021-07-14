@@ -21,6 +21,7 @@ import {
   UpdateUserAction,
 } from '../../../shared/states/users-state/users.actions';
 import { SearchState } from '../../../shared/states/search-state/search.state';
+import { SortAction } from '../../../shared/states/search-state/search.actions';
 
 @Component({
   selector: 'app-users-list',
@@ -33,6 +34,8 @@ export class UsersListComponent implements OnInit, OnDestroy {
   users!: UserInfoModel[];
   countries!: { name: string }[];
   isShowPopup = false;
+  sortOrder = '';
+  sortBy = '';
   constructor(
     private userService: UserService,
     private fb: FormBuilder,
@@ -230,8 +233,25 @@ export class UsersListComponent implements OnInit, OnDestroy {
     this.store.dispatch(new DeleteUserDefaultAction());
   }
 
+  sort(sortBy: string) {
+    if (this.sortBy !== sortBy) {
+      this.sortOrder = '';
+    }
+    this.sortBy = sortBy;
+    if (this.sortOrder === '') {
+      this.sortOrder = 'desc';
+    } else if (this.sortOrder === 'desc') {
+      this.sortOrder = 'asc';
+    } else if (this.sortOrder === 'asc') {
+      this.sortOrder = '';
+      this.sortBy = '';
+    }
+    this.store.dispatch(
+      new SortAction({ sortBy: this.sortBy, sortOrder: this.sortOrder })
+    );
+  }
+
   ngOnDestroy() {
-    this.store.dispatch(new ResetStateAction());
     if (this.subscriptions.length > 0) {
       this.subscriptions.map((sub) => sub.unsubscribe());
     }

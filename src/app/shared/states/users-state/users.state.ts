@@ -14,12 +14,11 @@ import {
 } from './users.actions';
 import { UserService } from '../../services/user.service';
 import { tap } from 'rxjs/operators';
+import { FilterUsersAction } from '../search-state/search.actions';
 
 export interface UsersStateModel {
-  users: UserInfoModel[];
   openUser: number | null;
   edit: {
-    user: UserInfoModel | null;
     userId: number | null;
     addressIndex: number | null;
   };
@@ -29,9 +28,8 @@ export interface UsersStateModel {
 @State<UsersStateModel>({
   name: 'users',
   defaults: {
-    users: [],
     openUser: null,
-    edit: { user: null, userId: null, addressIndex: null },
+    edit: { userId: null, addressIndex: null },
     deleteInfo: { userId: null, user: null },
   },
 })
@@ -46,7 +44,6 @@ export class UsersState {
 
   @Selector()
   static edit({ edit }: UsersStateModel): {
-    user: UserInfoModel | null;
     userId: number | null;
     addressIndex: number | null;
   } {
@@ -76,15 +73,14 @@ export class UsersState {
     { patchState, getState }: StateContext<UsersStateModel>,
     { userId, addressIndex }: EditUserAction
   ) {
-    const editUser = getState().users.filter((user) => user.id === userId);
     patchState({
-      edit: { user: { ...editUser[0] }, userId, addressIndex },
+      edit: { userId, addressIndex },
     });
   }
   @Action(ExitEditUserAction)
   ExitEditUser({ patchState }: StateContext<UsersStateModel>) {
     patchState({
-      edit: { user: null, userId: null, addressIndex: null },
+      edit: { userId: null, addressIndex: null },
     });
   }
 
@@ -93,21 +89,7 @@ export class UsersState {
     { patchState, getState }: StateContext<UsersStateModel>,
     action: UpdateUserAction
   ) {
-    return this.userService.updateUser(action.id, action.user).pipe(
-      tap(() => {
-        const updatesUsers = [...getState().users];
-        const userIndex = updatesUsers.findIndex(
-          (user) => user.id === action.id
-        );
-        updatesUsers[userIndex] = {
-          ...updatesUsers[userIndex],
-          ...action.user,
-        };
-        patchState({
-          users: [...updatesUsers],
-        });
-      })
-    );
+    return this.userService.updateUser(action.id, action.user);
   }
 
   @Action(SetDeleteUserInfoAction)
@@ -121,34 +103,36 @@ export class UsersState {
   }
 
   @Action(DeleteUserAction)
-  deleteUser({ patchState, getState }: StateContext<UsersStateModel>) {
-    const { users, deleteInfo } = getState();
-    const updateUsers = users.filter((user) => user.id !== deleteInfo.userId);
+  deleteUser({
+    patchState,
+    getState,
+    dispatch,
+  }: StateContext<UsersStateModel>) {
+    const { deleteInfo } = getState();
     return this.userService
       .deleteUser(deleteInfo.userId as number)
       .subscribe(() => {
         patchState({
-          users: [...updateUsers],
           deleteInfo: { userId: null, user: null },
         });
+        dispatch(new FilterUsersAction());
       });
   }
 
   @Action(DeleteUserAddressAction)
-  deleteUserAddress({ patchState, getState }: StateContext<UsersStateModel>) {
-    const { users, deleteInfo } = getState();
-    const userIndex = users.findIndex((user) => user.id === deleteInfo.userId);
-    const updatedUser = { ...users[userIndex], ...deleteInfo.user };
-    const updatedUsers = [...users];
-    updatedUsers[userIndex] = updatedUser;
-    console.log(deleteInfo);
+  deleteUserAddress({
+    patchState,
+    getState,
+    dispatch,
+  }: StateContext<UsersStateModel>) {
+    const { deleteInfo } = getState();
     return this.userService
       .updateUser(deleteInfo.userId as number, deleteInfo.user as UserInfoModel)
       .subscribe(() => {
         patchState({
-          users: [...updatedUsers],
           deleteInfo: { userId: null, user: null },
         });
+        dispatch(new FilterUsersAction());
       });
   }
 
@@ -162,9 +146,8 @@ export class UsersState {
   @Action(ResetStateAction)
   resetState({ setState }: StateContext<UsersStateModel>) {
     setState({
-      users: [],
       openUser: null,
-      edit: { user: null, userId: null, addressIndex: null },
+      edit: { userId: null, addressIndex: null },
       deleteInfo: { userId: null, user: null },
     });
   }

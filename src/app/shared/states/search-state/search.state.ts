@@ -5,19 +5,24 @@ import {
   ChangePageAction,
   ChangePageSizeAction,
   FilterUsersAction,
+  SetRequestAction,
+  SortAction,
   TotalUsersCountAction,
 } from './search.actions';
 import { SearchService } from '../../services/search.service';
 import { tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
 
-export interface SearchStateModel {
+export interface InfoModel {
   pageNum: number;
   pageSize: number;
-  sortBy: string | null;
-  sortOrder: 'desc' | 'asc';
-  searchRequest: string;
+  indent: number;
+  sortBy: string;
+  sortOrder: string;
   totalCount: number;
+}
+
+export interface SearchStateModel extends InfoModel {
+  searchRequest: string;
   users: UserInfoModel[];
 }
 
@@ -26,9 +31,10 @@ export interface SearchStateModel {
   defaults: {
     pageNum: 0,
     pageSize: 5,
-    sortBy: null,
+    sortBy: '',
     sortOrder: 'desc',
     searchRequest: '',
+    indent: 3,
     totalCount: 0,
     users: [],
   },
@@ -42,52 +48,65 @@ export class SearchState {
   }
 
   @Selector()
-  static getTotalCount({ totalCount }: SearchStateModel): number {
-    return totalCount;
+  static getInfo({
+    pageNum,
+    pageSize,
+    indent,
+    sortBy,
+    sortOrder,
+    totalCount,
+  }: SearchStateModel): InfoModel {
+    return { pageNum, pageSize, indent, sortBy, sortOrder, totalCount };
   }
 
   @Action(FilterUsersAction)
-  filterUsers(
-    { patchState, getState, dispatch }: StateContext<SearchStateModel>,
-    { payload }: FilterUsersAction
-  ) {
+  filterUsers({ patchState, getState }: StateContext<SearchStateModel>) {
     const state = getState();
+    return this.searchService
+      .filterUsers(
+        state.pageNum,
+        state.pageSize,
+        state.searchRequest,
+        state.sortBy,
+        state.sortOrder
+      )
+      .pipe(
+        tap((users) => {
+          patchState({
+            users: [...users],
+          });
+        })
+      );
+  }
+
+  @Action(SetRequestAction)
+  setRequest(
+    { patchState, dispatch }: StateContext<SearchStateModel>,
+    { payload }: SetRequestAction
+  ) {
     let newReq: string[] = [];
     Object.keys(payload).forEach(
       (key: any) =>
         payload[key] !== null &&
         newReq.push(`${key}:${payload[key].toLowerCase()}`)
     );
-    return this.searchService
-      .filterUsers(state.pageNum, state.pageSize, newReq.join())
-      .pipe(
-        tap((users) => {
-          patchState({
-            users: [...users],
-            searchRequest: newReq.join(),
-          });
-        }),
-        tap(() => dispatch(new TotalUsersCountAction()))
-      );
+    patchState({
+      pageNum: 0,
+      searchRequest: `search=${newReq.join()}`,
+    });
+    dispatch(new FilterUsersAction());
+    dispatch(new TotalUsersCountAction());
   }
 
   @Action(ChangePageSizeAction)
   changePageSize(
-    { patchState, getState, dispatch }: StateContext<SearchStateModel>,
+    { patchState, dispatch }: StateContext<SearchStateModel>,
     { size }: ChangePageSizeAction
   ) {
-    const state = getState();
-    return this.searchService
-      .filterUsers(state.pageNum, size, state.searchRequest)
-      .pipe(
-        tap((users) => {
-          patchState({
-            pageSize: size,
-            users: [...users],
-          });
-        }),
-        tap(() => dispatch(new TotalUsersCountAction()))
-      );
+    patchState({
+      pageSize: size,
+    });
+    dispatch(new FilterUsersAction());
   }
 
   @Action(ChangePageAction)
@@ -95,18 +114,22 @@ export class SearchState {
     { patchState, getState, dispatch }: StateContext<SearchStateModel>,
     { pageNumber }: ChangePageAction
   ) {
-    const state = getState();
-    return this.searchService
-      .filterUsers(pageNumber, state.pageSize, state.searchRequest)
-      .pipe(
-        tap((users) => {
-          patchState({
-            pageNum: pageNumber,
-            users: [...users],
-          });
-        }),
-        tap(() => dispatch(new TotalUsersCountAction()))
-      );
+    patchState({
+      pageNum: pageNumber,
+    });
+    dispatch(new FilterUsersAction());
+  }
+
+  @Action(SortAction)
+  sort(
+    { patchState, dispatch }: StateContext<SearchStateModel>,
+    { payload }: SortAction
+  ) {
+    patchState({
+      sortOrder: payload.sortOrder,
+      sortBy: payload.sortBy,
+    });
+    dispatch(new FilterUsersAction());
   }
 
   @Action(TotalUsersCountAction)

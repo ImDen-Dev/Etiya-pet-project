@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
-import { FilterUsersAction } from '../../shared/states/search-state/search.actions';
+import { SetRequestAction } from '../../shared/states/search-state/search.actions';
 import { SearchState } from '../../shared/states/search-state/search.state';
 import { Observable } from 'rxjs';
 import { UserInfoModel } from '../../shared/models/user-info.model';
@@ -35,6 +35,6 @@ export class FindUserComponent implements OnInit {
   }
 
   onSubmit() {
-    this.store.dispatch(new FilterUsersAction(this.findUserForm.value));
+    this.store.dispatch(new SetRequestAction(this.findUserForm.value));
   }
 }

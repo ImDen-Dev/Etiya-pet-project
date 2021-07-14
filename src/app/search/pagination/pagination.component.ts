@@ -5,8 +5,10 @@ import {
   ChangePageSizeAction,
 } from '../../shared/states/search-state/search.actions';
 import { Observable } from 'rxjs';
-import { SearchState } from '../../shared/states/search-state/search.state';
-import { count } from 'rxjs/operators';
+import {
+  InfoModel,
+  SearchState,
+} from '../../shared/states/search-state/search.state';
 
 @Component({
   selector: 'app-pagination',
@@ -14,43 +16,51 @@ import { count } from 'rxjs/operators';
   styleUrls: ['./pagination.component.scss'],
 })
 export class PaginationComponent implements OnInit {
-  indent = 3;
-  currentPage = 0;
-  pageSize = 5;
+  indent!: number;
+  currentPage!: number;
+  pageSize!: number;
   countPages!: number[];
+  sortBy!: string | null;
+  sortOrder!: string;
   totalUsersCount!: number;
 
-  @Select(SearchState.getTotalCount) totalCount$!: Observable<number>;
+  @Select(SearchState.getInfo) info$!: Observable<InfoModel>;
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.totalCount$.subscribe((count) => {
-      this.totalUsersCount = count;
-      this.pagesCount();
-    });
+    this.getInfo();
+  }
+
+  getInfo() {
+    this.info$.subscribe(
+      ({ indent, totalCount, pageSize, pageNum, sortBy, sortOrder }) => {
+        this.totalUsersCount = totalCount;
+        this.currentPage = pageNum;
+        this.pageSize = pageSize;
+        this.sortBy = sortBy;
+        this.sortOrder = sortOrder;
+        this.indent = indent;
+        this.pagesCount();
+      }
+    );
   }
 
   pagesCount() {
     this.countPages = new Array(
       Math.ceil(this.totalUsersCount / this.pageSize)
     );
-    if (this.currentPage > this.countPages.length - 1) {
-      this.currentPage =
-        this.countPages.length === 0
-          ? this.countPages.length
-          : this.countPages.length - 1;
-    }
-    this.store
-      .dispatch(new ChangePageAction(this.currentPage))
-      .subscribe(() => {
-        this.store.dispatch(new ChangePageSizeAction(this.pageSize));
-      });
   }
 
   onChangePageSize(event: MouseEvent) {
     this.pageSize = +(event.target as HTMLSelectElement).value;
     this.pagesCount();
+    this.store
+      .dispatch(new ChangePageSizeAction(this.pageSize))
+      .subscribe(() => {
+        this.currentPage = 0;
+        this.store.dispatch(new ChangePageAction(this.currentPage));
+      });
   }
 
   onNextPrev(isNext: boolean) {

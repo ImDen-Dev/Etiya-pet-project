@@ -56,14 +56,14 @@
         (click)="onChangePageSize($event)"
       >
         <option disabled>Users count</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option selected value="5">5</option>
-        <option value="10">10</option>
-        <option value="15">15</option>
-        <option value="20">20</option>
+        <option [selected]="pageSize === 1" value="1">1</option>
+        <option [selected]="pageSize === 2" value="2">2</option>
+        <option [selected]="pageSize === 3" value="3">3</option>
+        <option [selected]="pageSize === 4" value="4">4</option>
+        <option [selected]="pageSize === 5" value="5">5</option>
+        <option [selected]="pageSize === 10" value="10">10</option>
+        <option [selected]="pageSize === 15" value="15">15</option>
+        <option [selected]="pageSize === 20" value="20">20</option>
       </select>
     </div>
   </div>

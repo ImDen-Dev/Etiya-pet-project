@@ -4,20 +4,68 @@
       <table class="table table-striped user-select-none">
         <thead>
           <tr>
-            <th scope="col">
-              <span class="material-icons">expand_less</span> First Name
+            <th scope="col" class="thead-th" (click)="sort('firstName')">
+              <span
+                class="material-icons"
+                *ngIf="sortOrder === 'asc' && sortBy === 'firstName'"
+                >expand_less</span
+              >
+              <span
+                class="material-icons"
+                *ngIf="sortOrder === 'desc' && sortBy === 'firstName'"
+                >expand_more</span
+              >
+              First Name
             </th>
-            <th scope="col">
-              <span class="material-icons">expand_less</span> Last Name
+            <th scope="col" class="thead-th" (click)="sort('lastName')">
+              <span
+                class="material-icons"
+                *ngIf="sortOrder === 'asc' && sortBy === 'lastName'"
+                >expand_less</span
+              >
+              <span
+                class="material-icons"
+                *ngIf="sortOrder === 'desc' && sortBy === 'lastName'"
+                >expand_more</span
+              >
+              Last Name
             </th>
-            <th scope="col">
-              <span class="material-icons">expand_less</span> User Name
+            <th scope="col" class="thead-th" (click)="sort('userName')">
+              <span
+                class="material-icons"
+                *ngIf="sortOrder === 'asc' && sortBy === 'userName'"
+                >expand_less</span
+              >
+              <span
+                class="material-icons"
+                *ngIf="sortOrder === 'desc' && sortBy === 'userName'"
+                >expand_more</span
+              >User Name
             </th>
-            <th scope="col">
-              <span class="material-icons">expand_less</span> Email
+            <th scope="col" class="thead-th" (click)="sort('email')">
+              <span
+                class="material-icons"
+                *ngIf="sortOrder === 'asc' && sortBy === 'email'"
+                >expand_less</span
+              >
+              <span
+                class="material-icons"
+                *ngIf="sortOrder === 'desc' && sortBy === 'email'"
+                >expand_more</span
+              >Email
             </th>
-            <th scope="col">
-              <span class="material-icons">expand_less</span> Phone
+            <th scope="col" class="thead-th" (click)="sort('phone')">
+              <span
+                class="material-icons"
+                *ngIf="sortOrder === 'asc' && sortBy === 'phone'"
+                >expand_less</span
+              >
+              <span
+                class="material-icons"
+                *ngIf="sortOrder === 'desc' && sortBy === 'phone'"
+                >expand_more</span
+              >
+              Phone
             </th>
             <th scope="col" *ngIf="isAuth$ | async">Actions</th>
           </tr>
