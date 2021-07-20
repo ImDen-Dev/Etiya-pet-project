@@ -1,6 +1,6 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { Injectable } from '@angular/core';
-import { UserInfoModel } from '../../models/user-info.model';
+import { UserModel } from '../../models/user.model';
 import {
   ChangePageAction,
   ChangePageSizeAction,
@@ -23,7 +23,7 @@ export interface InfoModel {
 
 export interface SearchStateModel extends InfoModel {
   searchRequest: string;
-  users: UserInfoModel[];
+  users: UserModel[];
 }
 
 @State<SearchStateModel>({
@@ -43,7 +43,7 @@ export interface SearchStateModel extends InfoModel {
 export class SearchState {
   constructor(private searchService: SearchService) {}
   @Selector()
-  static getUsers({ users }: SearchStateModel): UserInfoModel[] {
+  static getUsers({ users }: SearchStateModel): UserModel[] {
     return users;
   }
 

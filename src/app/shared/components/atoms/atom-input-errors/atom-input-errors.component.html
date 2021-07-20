@@ -1,0 +1,26 @@
+<div [ngSwitch]="stringError">
+  <div *ngSwitchCase="'required'">
+    <p class="text-danger">{{ fieldText }} is required</p>
+  </div>
+  <div *ngSwitchCase="'email'">
+    <p class="text-danger">Invalid {{ fieldText }}</p>
+  </div>
+  <div *ngSwitchCase="'minlength'">
+    <p class="text-danger">
+      Minimum {{ fieldText | lowercase }} length must be
+      {{ validationErrors?.minlength.requiredLength }} characters
+    </p>
+  </div>
+  <div *ngSwitchCase="'maxlength'">
+    <p class="text-danger">
+      Minimum {{ fieldText | lowercase }} length must be
+      {{ validationErrors?.maxlength.requiredLength }} characters
+    </p>
+  </div>
+  <div *ngSwitchCase="'pattern'">
+    <p class="text-danger">{{ fieldText | lowercase }} can only be numeric</p>
+  </div>
+  <div *ngSwitchCase="'mismatch'">
+    <p class="text-danger">Password mismatch</p>
+  </div>
+</div>

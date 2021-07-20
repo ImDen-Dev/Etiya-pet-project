@@ -1,0 +1,153 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-2 border border">
+      <molecule-table-col
+        [isEdit]="isEdit === true"
+        controlName="firstName"
+        inputType="text"
+      ></molecule-table-col>
+    </div>
+    <div class="col-2 border">
+      <molecule-table-col
+        [isEdit]="isEdit === true"
+        controlName="lastName"
+        inputType="text"
+      ></molecule-table-col>
+    </div>
+    <div class="col-2 border">
+      <molecule-table-col
+        [isEdit]="isEdit === true"
+        controlName="userName"
+        inputType="text"
+      ></molecule-table-col>
+    </div>
+    <div class="col-2 border">
+      <molecule-table-col
+        [isEdit]="isEdit === true"
+        controlName="email"
+        inputType="email"
+      ></molecule-table-col>
+    </div>
+    <div class="col-2 border">
+      <molecule-table-col
+        [isEdit]="isEdit === true"
+        controlName="phone"
+        inputType="tel"
+      ></molecule-table-col>
+    </div>
+    <div class="col-2 border">
+      <div class="btns btn-group py-1" *ngIf="isEdit !== true">
+        <button class="btn btn-primary" type="button" (click)="onEdit(true)">
+          Edit
+        </button>
+        <button class="btn btn-danger" type="button" (click)="onDelete()">
+          Delete
+        </button>
+      </div>
+      <div class="btns btn-group py-1" *ngIf="isEdit === true">
+        <button class="btn btn-success" type="submit" (click)="onEdit(true)">
+          Save
+        </button>
+        <button class="btn btn-danger" type="button" (click)="onCancel()">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="container" formArrayName="userAddress">
+    <div class="row bg-light">
+      <div class="col-2 border py-2 py-2">
+        <atom-table-head-label
+          text="Address Type"
+          [isSortable]="false"
+        ></atom-table-head-label>
+      </div>
+      <div class="col-2 border py-2">
+        <atom-table-head-label
+          text="Address"
+          [isSortable]="false"
+        ></atom-table-head-label>
+      </div>
+      <div class="col-2 border py-2">
+        <atom-table-head-label
+          text="Postal Code"
+          [isSortable]="false"
+        ></atom-table-head-label>
+      </div>
+      <div class="col-2 border py-2">
+        <atom-table-head-label
+          text="City"
+          [isSortable]="false"
+        ></atom-table-head-label>
+      </div>
+      <div class="col-2 border py-2">
+        <atom-table-head-label
+          text="Country"
+          [isSortable]="false"
+        ></atom-table-head-label>
+      </div>
+      <div class="col-2 border py-2"><span class="actions">Actions</span></div>
+    </div>
+    <div
+      class="row"
+      *ngFor="let _ of userAddresses.controls; let i = index"
+      [formGroupName]="i"
+    >
+      <div class="col-2 border border">
+        <molecule-table-select-col
+          controlName="addressType"
+          [isEdit]="isEdit === i"
+        ></molecule-table-select-col>
+      </div>
+      <div class="col-2 border">
+        <molecule-table-col
+          [isEdit]="isEdit === i"
+          controlName="address"
+          inputType="text"
+        ></molecule-table-col>
+      </div>
+      <div class="col-2 border">
+        <molecule-table-col
+          [isEdit]="isEdit === i"
+          controlName="postalCode"
+          inputType="text"
+        ></molecule-table-col>
+      </div>
+      <div class="col-2 border">
+        <molecule-table-col
+          [isEdit]="isEdit === i"
+          controlName="city"
+          inputType="email"
+        ></molecule-table-col>
+      </div>
+      <div class="col-2 border">
+        <molecule-table-select-col
+          controlName="country"
+          [isEdit]="isEdit === i"
+          [countries]="countries"
+        ></molecule-table-select-col>
+      </div>
+      <div class="col-2 border">
+        <div class="btns btn-group py-1" *ngIf="isEdit !== i">
+          <button class="btn btn-primary" type="button" (click)="onEdit(i)">
+            Edit
+          </button>
+          <button class="btn btn-danger" type="button" (click)="onDelete(i)">
+            Delete
+          </button>
+        </div>
+        <div class="btns btn-group py-1" *ngIf="isEdit === i">
+          <button class="btn btn-success">Save</button>
+          <button class="btn btn-danger" type="button" (click)="onCancel()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<app-alert-modal
+  *ngIf="delete"
+  (delete)="delete = false"
+  [isAddress]="isAddress"
+></app-alert-modal>

@@ -1,5 +1,5 @@
 import { SearchModel } from '../../models/search.model';
-import { UserInfoModel } from '../../models/user-info.model';
+import { UserModel } from '../../models/user.model';
 
 export class GetUsersAction {
   static readonly desc = 'Get all found users';
@@ -32,13 +32,13 @@ export class ExitEditUserAction {
 export class UpdateUserAction {
   static readonly desc = 'Update User';
   static readonly type = '[Users] Update User';
-  constructor(public id: number, public user: UserInfoModel) {}
+  constructor(public id: number, public user: UserModel) {}
 }
 
 export class SetDeleteUserInfoAction {
   static readonly desc = 'Delete user or user address';
   static readonly type = '[Users] Set Delete User info';
-  constructor(public userId: number, public user: UserInfoModel | null) {}
+  constructor(public userId: number, public user: UserModel | null) {}
 }
 
 export class DeleteUserDefaultAction {

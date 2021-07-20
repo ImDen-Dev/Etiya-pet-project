@@ -1,0 +1,64 @@
+<form [formGroup]="mainInfo" (ngSubmit)="onSubmit()" class="row g-3 w-50">
+  <h4>Main info</h4>
+  <hr />
+  <div class="col-12">
+    <atom-input-with-label
+      labelText="First name"
+      formControlName="firstName"
+      inputType="text"
+      inputId="firstName"
+    ></atom-input-with-label>
+  </div>
+  <div class="col-12">
+    <atom-input-with-label
+      labelText="Last name"
+      formControlName="lastName"
+      inputType="text"
+      inputId="lastName"
+    ></atom-input-with-label>
+  </div>
+  <div class="col-12">
+    <atom-input-with-label
+      labelText="User name"
+      formControlName="userName"
+      inputType="text"
+      inputId="userName"
+    ></atom-input-with-label>
+  </div>
+  <div class="col-12">
+    <atom-input-with-label
+      labelText="Phone number"
+      formControlName="phone"
+      inputType="tel"
+      inputId="phone"
+    ></atom-input-with-label>
+  </div>
+  <div class="col-12">
+    <atom-input-with-label
+      labelText="Email"
+      formControlName="email"
+      inputType="email"
+      inputId="email"
+    ></atom-input-with-label>
+  </div>
+  <div class="col-6">
+    <atom-input-with-label
+      labelText="Password"
+      formControlName="password"
+      inputType="password"
+      inputId="password"
+    ></atom-input-with-label>
+  </div>
+  <div class="col-6">
+    <atom-input-with-label
+      labelText="Confirm password"
+      formControlName="confirmPassword"
+      inputType="password"
+      inputId="confirmPassword"
+    ></atom-input-with-label>
+  </div>
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary">Next</button>
+  </div>
+  <!--  TODO: create btn atom-->
+</form>

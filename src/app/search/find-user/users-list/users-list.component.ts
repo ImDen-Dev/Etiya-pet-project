@@ -2,13 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { UserService } from '../../../shared/services/user.service';
-import { UserInfoModel } from '../../../shared/models/user-info.model';
+import { UserModel } from '../../../shared/models/user.model';
 import { AddressModel } from '../../../shared/models/address.model';
 import { AuthService } from '../../../shared/services/auth.service';
 import { Observable, Subscription } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { AuthState } from '../../../shared/states/auth-state/auth.state';
-import { UsersState } from '../../../shared/states/users-state/users.state';
+import { UsersTableState } from '../../../shared/states/users-table-state/users-table.state';
 import {
   DeleteUserAction,
   DeleteUserAddressAction,
@@ -16,10 +16,9 @@ import {
   EditUserAction,
   ExitEditUserAction,
   OpenUserAction,
-  ResetStateAction,
   SetDeleteUserInfoAction,
   UpdateUserAction,
-} from '../../../shared/states/users-state/users.actions';
+} from '../../../shared/states/users-table-state/users-table.actions';
 import { SearchState } from '../../../shared/states/search-state/search.state';
 import { SortAction } from '../../../shared/states/search-state/search.actions';
 
@@ -31,7 +30,7 @@ import { SortAction } from '../../../shared/states/search-state/search.actions';
 export class UsersListComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   forms!: FormGroup;
-  users!: UserInfoModel[];
+  users!: UserModel[];
   countries!: { name: string }[];
   isShowPopup = false;
   sortOrder = '';
@@ -44,10 +43,10 @@ export class UsersListComponent implements OnInit, OnDestroy {
   ) {}
 
   @Select(AuthState.isAuth) isAuth$!: Observable<boolean>;
-  @Select(SearchState.getUsers) users$!: Observable<UserInfoModel[]>;
-  @Select(UsersState.getOpenUser) opened$!: Observable<number | null>;
-  @Select(UsersState.edit) edit$!: Observable<{
-    user: UserInfoModel | null;
+  @Select(SearchState.getUsers) users$!: Observable<UserModel[]>;
+  @Select(UsersTableState.getOpenUser) opened$!: Observable<number | null>;
+  @Select(UsersTableState.edit) edit$!: Observable<{
+    user: UserModel | null;
     userId: number | null;
     addressIndex: number | null;
   }>;
@@ -93,7 +92,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
     return this.getUserAddresses(userIndex).at(addressIndex);
   }
 
-  addUserToForm(users: UserInfoModel[]) {
+  addUserToForm(users: UserModel[]) {
     this.initForm();
     users.forEach((user, index) => {
       this.getFoundUsers.push(this.userGroup(user));
@@ -120,7 +119,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
     });
   }
 
-  userGroup(user: UserInfoModel): FormGroup {
+  userGroup(user: UserModel): FormGroup {
     return this.fb.group({
       firstName: [
         user.firstName,
@@ -152,7 +151,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
     this.isShowPopup = true;
 
     if (addressIndex !== null) {
-      const userValue: UserInfoModel = this.getFoundUsers.at(userIndex).value;
+      const userValue: UserModel = this.getFoundUsers.at(userIndex).value;
       userValue.userAddress.splice(addressIndex, addressIndex + 1);
       this.store.dispatch(new SetDeleteUserInfoAction(id, userValue));
     } else {
@@ -167,7 +166,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-    const { user } = this.store.selectSnapshot(UsersState.deleteInfo);
+    const { user } = this.store.selectSnapshot(UsersTableState.deleteInfo);
     if (!user) {
       this.store.dispatch(new DeleteUserAction());
     } else {

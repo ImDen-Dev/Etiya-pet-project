@@ -1,0 +1,20 @@
+<label [for]="inputId" [class]="labelClasses" *ngIf="labelText !== ''"
+  >{{ labelText }}
+  <span *ngIf="isRequired" class="text-danger">*</span>
+</label>
+<input
+  [type]="inputType"
+  [class]="inputClasses"
+  [attr.id]="inputId"
+  (blur)="onTouched()"
+  (input)="onInput($event)"
+  [required]="isRequired"
+  [value]="value"
+/>
+<ng-template [ngIf]="isRequired">
+  <atom-input-errors
+    *ngIf="control?.invalid && control?.touched"
+    [validationErrors]="control?.errors"
+    [fieldText]="labelText"
+  ></atom-input-errors>
+</ng-template>

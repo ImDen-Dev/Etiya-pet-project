@@ -1,0 +1,13 @@
+<span>{{ text }}</span>
+<div class="d-inline" *ngIf="isSortable">
+  <span
+    class="material-icons align-middle"
+    *ngIf="sortOrder === 'asc' && sortBy === controlName"
+    >expand_less</span
+  >
+  <span
+    class="material-icons align-middle"
+    *ngIf="sortOrder === 'desc' && sortBy === controlName"
+    >expand_more</span
+  >
+</div>

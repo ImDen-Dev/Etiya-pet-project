@@ -3,54 +3,49 @@
   <hr />
   <form [formGroup]="findUserForm" (ngSubmit)="onSubmit()" class="row g-3 mb-4">
     <div class="col-6">
-      <label for="firstName" class="form-label">First Name</label>
-      <input
-        type="text"
-        name="firstName"
-        id="firstName"
-        class="form-control"
+      <atom-input-with-label
+        inputType="text"
+        inputId="firstName"
+        labelText="First name"
+        [isRequired]="false"
         formControlName="firstName"
-      />
+      ></atom-input-with-label>
     </div>
     <div class="col-6">
-      <label for="lastName" class="form-label">Last Name</label>
-      <input
-        type="text"
-        name="lastName"
-        id="lastName"
-        class="form-control"
+      <atom-input-with-label
+        inputType="text"
+        inputId="lastName"
+        labelText="Last name"
+        [isRequired]="false"
         formControlName="lastName"
-      />
+      ></atom-input-with-label>
     </div>
     <div class="col-4">
-      <label for="username" class="form-label">Username</label>
-      <input
-        type="text"
-        name="username"
-        id="username"
-        class="form-control"
+      <atom-input-with-label
+        inputType="text"
+        inputId="userName"
+        labelText="User name"
+        [isRequired]="false"
         formControlName="userName"
-      />
+      ></atom-input-with-label>
     </div>
     <div class="col-4">
-      <label for="email" class="form-label">Email</label>
-      <input
-        type="email"
-        name="username"
-        id="email"
-        class="form-control"
+      <atom-input-with-label
+        inputType="email"
+        inputId="email"
+        labelText="email"
+        [isRequired]="false"
         formControlName="email"
-      />
+      ></atom-input-with-label>
     </div>
     <div class="col-4">
-      <label for="phone" class="form-label">Phone</label>
-      <input
-        type="tel"
-        name="username"
-        id="phone"
-        class="form-control"
+      <atom-input-with-label
+        inputType="tel"
+        inputId="phone"
+        labelText="Phone"
+        [isRequired]="false"
         formControlName="phone"
-      />
+      ></atom-input-with-label>
     </div>
     <div class="col-auto">
       <button type="reset" class="btn btn-secondary me-2">Reset</button>

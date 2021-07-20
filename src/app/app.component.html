@@ -2,11 +2,12 @@
   <app-header></app-header>
   <div class="main h-100 d-flex flex-row flex-fill">
     <app-sidebar></app-sidebar>
-    <main class="flex-fill py-3">
+    <main class="flex-fill py-3 overflow-hidden">
       <div class="container">
         <router-outlet></router-outlet>
       </div>
     </main>
   </div>
   <app-footer></app-footer>
+  <atom-spinner *ngIf="isLoading$ | async"></atom-spinner>
 </div>

@@ -1,25 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserModel } from '../shared/models/user.model';
+import { UserInfoModel } from '../shared/models/userInfoModel';
 import { AuthService } from '../shared/services/auth.service';
 import { AddressModel } from '../shared/models/address.model';
-import { Router } from '@angular/router';
-import { UserInfoModel } from '../shared/models/user-info.model';
+import { Router, RouterOutlet } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { CreateUserAction } from '../shared/states/auth-state/auth.actions';
 import { AuthState } from '../shared/states/auth-state/auth.state';
+import {
+  StartLoading,
+  StopLoading,
+} from '../shared/states/ui-state/ui.actions';
+import { tap } from 'rxjs/operators';
+import { UserModel } from '../shared/models/user.model';
+import { slideInAnimation } from './router.animation';
 
 @Component({
   selector: 'app-create-user',
   templateUrl: './create-user.component.html',
   styleUrls: ['./create-user.component.scss'],
+  animations: [slideInAnimation],
 })
 export class CreateUserComponent implements OnInit {
   page = 'mainInfo';
   mainInfo!: FormGroup;
   addressInfo!: FormGroup;
-  user!: UserModel;
-  countries!: any;
+  user!: UserInfoModel;
   constructor(
     private fb: FormBuilder,
     public authService: AuthService,
@@ -27,97 +33,10 @@ export class CreateUserComponent implements OnInit {
     private store: Store
   ) {}
 
-  ngOnInit(): void {
-    this.initMainInfoForm();
-    this.initAddressInfoForm();
-    this.authService
-      .getAllCountries()
-      .subscribe((data) => (this.countries = data));
-  }
-
-  initMainInfoForm() {
-    this.mainInfo = this.fb.group(
-      {
-        firstName: [null, [Validators.required, Validators.minLength(3)]],
-        lastName: [null, [Validators.required, Validators.minLength(3)]],
-        userName: [null, [Validators.required, Validators.minLength(3)]],
-        phone: [
-          null,
-          [
-            Validators.required,
-            Validators.pattern(/[-+()0-9]/g),
-            Validators.minLength(10),
-            Validators.maxLength(17),
-          ],
-        ],
-        email: [null, [Validators.required, Validators.email]],
-        password: [null, [Validators.required, Validators.minLength(6)]],
-        confirmPassword: [null, Validators.required],
-      },
-      {
-        validators: this.mustMatch('password', 'confirmPassword'),
-      }
-    );
-  }
-
-  initAddressInfoForm() {
-    this.addressInfo = this.fb.group({
-      userAddress: this.fb.array([this.createAddressGroup()]),
-    });
-  }
-
-  addAddressGroup() {
-    this.getAddressInfoArray.push(this.createAddressGroup());
-  }
-
-  createAddressGroup() {
-    return this.fb.group({
-      addressType: [null, Validators.required],
-      address: [null, Validators.required],
-      city: [null, Validators.required],
-      country: [null, Validators.required],
-      postalCode: [
-        null,
-        [
-          Validators.required,
-          Validators.pattern(/[0-9]/g),
-          Validators.maxLength(5),
-        ],
-      ],
-    });
-  }
-
-  get getMainInfoForm() {
-    return this.mainInfo.controls;
-  }
-
-  get getAddressInfoArray() {
-    return this.addressInfo.get('userAddress') as FormArray;
-  }
-
-  get getAddressControls() {
-    return (this.addressInfo.get('userAddress') as FormArray).controls;
-  }
-
-  private mustMatch(password: string, confirmPassword: string) {
-    return (formGroup: FormGroup) => {
-      const control = formGroup.controls[password];
-      const matchingControl = formGroup.controls[confirmPassword];
-      if (matchingControl.errors && !matchingControl.errors.mustMatch) {
-        return;
-      }
-      matchingControl.setErrors(
-        control.value === matchingControl.value ? null : { mismatch: true }
-      );
-    };
-  }
+  ngOnInit(): void {}
 
   changePage(pageName: string) {
     this.page = pageName;
-  }
-
-  deleteAddressControl(i: number) {
-    this.getAddressInfoArray.removeAt(i);
   }
 
   onCancel() {
@@ -127,16 +46,25 @@ export class CreateUserComponent implements OnInit {
   }
 
   onSave() {
-    const userInfo: UserModel = <UserModel>this.mainInfo.value;
+    const userInfo: UserInfoModel = <UserInfoModel>this.mainInfo.value;
     delete userInfo.confirmPassword;
     const addressInfo: AddressModel[] = this.addressInfo.value;
-    const user = <UserInfoModel>{ ...userInfo, ...addressInfo };
+    const user = <UserModel>{ ...userInfo, userAddress: [...addressInfo] };
+    this.store
+      .dispatch(new CreateUserAction(user))
+      .pipe(tap(() => this.store.dispatch(new StartLoading())))
+      .subscribe(() => {
+        const isAuth = this.store.selectSnapshot(AuthState.isAuth);
+        isAuth
+          ? this.router.navigate(['user-info'])
+          : this.router.navigate(['login']);
+        this.store.dispatch(new StopLoading());
+      });
+  }
 
-    this.store.dispatch(new CreateUserAction(user)).subscribe(() => {
-      const isAuth = this.store.selectSnapshot(AuthState.isAuth);
-      isAuth
-        ? this.router.navigate(['user-info'])
-        : this.router.navigate(['login']);
-    });
+  prepareRoute(outlet: RouterOutlet) {
+    return (
+      outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation
+    );
   }
 }

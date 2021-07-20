@@ -2,36 +2,18 @@
 <hr />
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-50 m-auto">
   <div class="mb-3">
-    <label for="email" class="form-label">Email address</label>
-    <input
-      type="email"
-      class="form-control"
-      id="email"
+    <atom-input-with-label
+      [labelText]="'Email'"
       formControlName="email"
-    />
-    <div *ngIf="getLoginForm.email.errors && getLoginForm.email.touched">
-      <p class="text-danger" *ngIf="getLoginForm.email.errors.required">
-        Email is required
-      </p>
-      <p class="text-danger" *ngIf="getLoginForm.email.errors.emil">
-        Not valid email
-      </p>
-    </div>
+    ></atom-input-with-label>
   </div>
   <div class="mb-3">
-    <label for="password" class="form-label">Password</label>
-    <input
-      type="password"
-      class="form-control"
-      id="password"
-      required
+    <atom-input-with-label
+      [inputType]="'password'"
+      [labelText]="'Password'"
+      [inputId]="'password'"
       formControlName="password"
-    />
-    <div *ngIf="getLoginForm.password.errors && getLoginForm.password.touched">
-      <p class="text-danger" *ngIf="getLoginForm.password.errors.required">
-        Password is required
-      </p>
-    </div>
+    ></atom-input-with-label>
   </div>
   <button type="submit" class="btn btn-primary">Login</button>
 </form>

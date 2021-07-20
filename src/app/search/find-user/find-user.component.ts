@@ -4,7 +4,7 @@ import { Select, Store } from '@ngxs/store';
 import { SetRequestAction } from '../../shared/states/search-state/search.actions';
 import { SearchState } from '../../shared/states/search-state/search.state';
 import { Observable } from 'rxjs';
-import { UserInfoModel } from '../../shared/models/user-info.model';
+import { UserModel } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-find-user',
@@ -13,9 +13,9 @@ import { UserInfoModel } from '../../shared/models/user-info.model';
 })
 export class FindUserComponent implements OnInit {
   findUserForm!: FormGroup;
-  users: UserInfoModel[] = [];
+  users: UserModel[] = [];
 
-  @Select(SearchState.getUsers) users$!: Observable<UserInfoModel[]>;
+  @Select(SearchState.getUsers) users$!: Observable<UserModel[]>;
 
   constructor(private fb: FormBuilder, private store: Store) {}
 

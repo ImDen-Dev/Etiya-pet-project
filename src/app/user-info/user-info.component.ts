@@ -1,11 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { UserModel } from '../shared/models/user.model';
-import { AddressModel } from '../shared/models/address.model';
-import { AuthService } from '../shared/services/auth.service';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserInfoModel } from '../shared/models/user-info.model';
+import { UserModel } from '../shared/models/user.model';
 import { Store } from '@ngxs/store';
 import { AuthState } from '../shared/states/auth-state/auth.state';
+import { CreateUserState } from '../shared/states/create-user-state/create-user.state';
+import {
+  ResetCreateUserStateAction,
+  SaveUserAction,
+} from '../shared/states/create-user-state/create-user.actions';
 
 @Component({
   selector: 'app-user-info',
@@ -13,26 +15,33 @@ import { AuthState } from '../shared/states/auth-state/auth.state';
   styleUrls: ['./user-info.component.scss'],
 })
 export class UserInfoComponent implements OnInit {
-  @Input() mainInfo!: UserModel;
-  @Input() addressInfo!: AddressModel[];
-  userInfo!: UserInfoModel;
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private store: Store
-  ) {}
+  userInfo!: UserModel | null;
+  isSummary = true;
+  constructor(private router: Router, private store: Store) {}
 
   ngOnInit(): void {
-    if (this.mainInfo && this.addressInfo) {
-      this.userInfo = <UserInfoModel>{ ...this.mainInfo, ...this.addressInfo };
-      return;
-    }
+    this.getUser();
+  }
 
-    const user = this.store.selectSnapshot(AuthState.getUser);
-    if (!user) {
-      this.router.navigate(['login']);
-      return;
-    }
-    this.userInfo = user;
+  getUser() {
+    this.isSummary = this.router.url === '/create-user/summary';
+    this.userInfo = this.isSummary
+      ? this.store.selectSnapshot(CreateUserState.getUser)
+      : this.store.selectSnapshot(AuthState.getUser);
+  }
+
+  previousPage() {
+    this.router.navigate(['/create-user/address']);
+  }
+
+  onCancel() {
+    this.store.dispatch(new ResetCreateUserStateAction());
+    this.router.navigate(['/create-user']);
+  }
+
+  onSave() {
+    this.store.dispatch(new SaveUserAction());
+    this.router.navigate(['/login']);
+    this.store.dispatch(new ResetCreateUserStateAction());
   }
 }

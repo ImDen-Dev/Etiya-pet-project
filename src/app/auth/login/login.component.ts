@@ -5,6 +5,10 @@ import { Store } from '@ngxs/store';
 import { LoginAction } from '../../shared/states/auth-state/auth.actions';
 import { AuthState } from '../../shared/states/auth-state/auth.state';
 import { Subscription } from 'rxjs';
+import {
+  StartLoading,
+  StopLoading,
+} from '../../shared/states/ui-state/ui.actions';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -15,6 +19,7 @@ import { tap } from 'rxjs/operators';
 export class LoginComponent implements OnInit, OnDestroy {
   loginForm!: FormGroup;
   sub!: Subscription;
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -22,27 +27,34 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    const isAuth = this.store.selectSnapshot(AuthState.isAuth);
+    if (isAuth) this.router.navigate(['user-info']);
     this.initForm();
   }
 
-  get getLoginForm() {
+  get getLoginFormControls() {
     return this.loginForm.controls;
   }
 
   initForm() {
     this.loginForm = this.fb.group({
       email: [null, [Validators.required, Validators.email]],
-      password: [null, Validators.required],
+      password: [null, [Validators.required]],
     });
   }
 
   onSubmit() {
-    this.store.dispatch(new LoginAction(this.loginForm.value)).subscribe(() => {
-      const isAuth = this.store.selectSnapshot(AuthState.isAuth);
-      isAuth
-        ? this.router.navigate(['user-info'])
-        : this.router.navigate(['create-user']);
-    });
+    if (!this.loginForm.valid) return;
+    this.store
+      .dispatch(new LoginAction(this.loginForm.value))
+      .pipe(tap(() => this.store.dispatch(new StartLoading())))
+      .subscribe(() => {
+        const isAuth = this.store.selectSnapshot(AuthState.isAuth);
+        isAuth
+          ? this.router.navigate(['user-info'])
+          : this.router.navigate(['create-user']);
+        this.store.dispatch(new StopLoading());
+      });
   }
 
   ngOnDestroy() {

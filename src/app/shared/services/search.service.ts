@@ -1,7 +1,7 @@
 import { SearchModel } from '../models/search.model';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { UserInfoModel } from '../models/user-info.model';
+import { UserModel } from '../models/user.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -15,8 +15,8 @@ export class SearchService {
     searchParam: string,
     sortBy: string,
     sortOrder: string
-  ): Observable<UserInfoModel[]> {
-    return this.http.get<UserInfoModel[]>(
+  ): Observable<UserModel[]> {
+    return this.http.get<UserModel[]>(
       `${environment.dbUrl}/api/user/all?pageNum=${pageNum}&sortBy=${sortBy}&sortOrder=${sortOrder}&pageSize=${pageSize}&${searchParam}`
     );
   }

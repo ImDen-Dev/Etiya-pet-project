@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   dbUrl: 'https://mini-group-app.herokuapp.com',
   // dbUrl: 'https://tast-attempt-2.herokuapp.com',
+  taxUrl: 'https://tax-calculator-1.herokuapp.com',
 };
 
 /*

@@ -1,4 +1,5 @@
-import { UserInfoModel } from '../../models/user-info.model';
+import { UserModel } from '../../models/user.model';
+import { AuthStateModel } from './auth.state';
 
 export class LoginAction {
   static readonly desc = 'Login user';
@@ -11,8 +12,14 @@ export class LogoutAction {
   static readonly type = '[Auth] Logout';
 }
 
+export class LoggedUser {
+  static readonly desc = 'Set Logged user';
+  static readonly type = '[Auth] Logged User';
+  constructor(public payload: AuthStateModel) {}
+}
+
 export class CreateUserAction {
   static readonly desc = 'Create new User';
   static readonly type = '[Auth] Create User';
-  constructor(public payload: UserInfoModel) {}
+  constructor(public payload: UserModel) {}
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { UserInfoModel } from '../models/user-info.model';
+import { UserModel } from '../models/user.model';
 import { environment } from '../../../environments/environment';
 import { catchError, tap } from 'rxjs/operators';
 
@@ -20,15 +20,12 @@ export class AuthService {
     );
   }
 
-  createUser(user: UserInfoModel) {
-    return this.http.post<UserInfoModel>(
-      `${environment.dbUrl}/api/user/new`,
-      user
-    );
+  createUser(user: UserModel) {
+    return this.http.post<UserModel>(`${environment.dbUrl}/api/user/new`, user);
   }
 
   getUser(email: string) {
-    return this.http.get<UserInfoModel>(
+    return this.http.get<UserModel>(
       `${environment.dbUrl}/api/user?email=${email}`
     );
   }

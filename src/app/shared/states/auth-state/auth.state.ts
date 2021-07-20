@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { UserInfoModel } from '../../models/user-info.model';
-import { CreateUserAction, LoginAction, LogoutAction } from './auth.actions';
+import { UserModel } from '../../models/user.model';
+import {
+  CreateUserAction,
+  LoggedUser,
+  LoginAction,
+  LogoutAction,
+} from './auth.actions';
 import { AuthService } from '../../services/auth.service';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -9,7 +14,7 @@ import { of } from 'rxjs';
 export interface AuthStateModel {
   isAuthenticated: boolean;
   token: string;
-  user: UserInfoModel | null;
+  user: UserModel | null;
 }
 
 @State<AuthStateModel>({
@@ -40,7 +45,10 @@ export class AuthState {
   }
 
   @Action(LoginAction)
-  login({ patchState }: StateContext<AuthStateModel>, action: LoginAction) {
+  login(
+    { patchState, getState }: StateContext<AuthStateModel>,
+    action: LoginAction
+  ) {
     return this.authService.login(action.payload).pipe(
       catchError((err) => {
         return of({ token: '' });
@@ -55,13 +63,27 @@ export class AuthState {
           return of(null);
         }
       }),
-      tap((user: UserInfoModel | null) => {
+      tap((user: UserModel | null) => {
         patchState({
           isAuthenticated: !!user,
           user: user ? { ...user } : null,
         });
+        const state = getState();
+        if (state.isAuthenticated)
+          localStorage.setItem('user', JSON.stringify(state));
       })
     );
+  }
+
+  @Action(LoggedUser) loggedUser(
+    { setState }: StateContext<AuthStateModel>,
+    { payload }: LoggedUser
+  ) {
+    setState({
+      user: payload.user,
+      token: payload.token,
+      isAuthenticated: payload.isAuthenticated,
+    });
   }
 
   @Action(LogoutAction)
@@ -71,6 +93,7 @@ export class AuthState {
       token: '',
       user: null,
     });
+    localStorage.removeItem('user');
   }
 
   @Action(CreateUserAction)

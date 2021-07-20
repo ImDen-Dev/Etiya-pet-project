@@ -1,0 +1,8 @@
+<p class="m-0 text-center" *ngIf="!isEdit">{{ control.value }}</p>
+<atom-select-with-label
+  *ngIf="isEdit"
+  labelText=""
+  [inputId]="controlName"
+  [optionsValue]="countries"
+  [formControl]="control"
+></atom-select-with-label>

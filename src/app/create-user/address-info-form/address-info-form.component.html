@@ -1,0 +1,76 @@
+<form class="row w-50 m-auto" [formGroup]="addressInfo" (ngSubmit)="onSubmit()">
+  <div
+    formArrayName="userAddress"
+    *ngFor="let _ of getAddressInfoArray.controls; let i = index"
+  >
+    <div class="address row g-3 mb-3" [formGroupName]="i">
+      <div class="col-12 d-flex justify-content-between">
+        <h4>Address info</h4>
+        <i
+          class="material-icons close"
+          *ngIf="getAddressInfoArray.length > 1"
+          (click)="deleteAddressControl(i)"
+          >close</i
+        >
+      </div>
+      <hr />
+      <div class="col-12">
+        <atom-select-with-label
+          inputId="{{ i }}"
+          formControlName="addressType"
+          labelText="Address type"
+        ></atom-select-with-label>
+      </div>
+      <div class="col-12">
+        <atom-input-with-label
+          labelText="Address"
+          inputId="address"
+          inputType="text"
+          formControlName="address"
+        ></atom-input-with-label>
+      </div>
+      <div class="col-6">
+        <atom-input-with-label
+          labelText="City"
+          inputId="city"
+          inputType="text"
+          formControlName="city"
+        ></atom-input-with-label>
+      </div>
+      <div class="col-6">
+        <atom-select-with-label
+          inputId="country"
+          formControlName="country"
+          labelText="Country"
+          disabledSelectedOption="Choose country"
+          [optionsValue]="countries"
+        ></atom-select-with-label>
+      </div>
+      <div class="col-12">
+        <atom-input-with-label
+          labelText="Postal code"
+          inputId="postalCode"
+          inputType="text"
+          formControlName="postalCode"
+        ></atom-input-with-label>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 mb-3">
+    <button
+      (click)="addAddressGroup()"
+      type="button"
+      class="btn btn-outline-success"
+    >
+      Add another address
+    </button>
+  </div>
+  <div class="col-12">
+    <button type="button" class="btn btn-primary me-2" (click)="previousPage()">
+      Previous
+    </button>
+    <button type="button" class="btn btn-primary" (click)="nextPage()">
+      Next
+    </button>
+  </div>
+</form>

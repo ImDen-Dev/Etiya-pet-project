@@ -1,0 +1,23 @@
+<h2 class="text-center">Tax Calculator</h2>
+<hr />
+<form [formGroup]="taxForm" (ngSubmit)="onSubmit()">
+  <atom-select-with-label
+    [optionsValue]="types"
+    formControlName="type"
+    labelText="Choose type"
+    disabledSelectedOption="Choose type"
+    inputId="type"
+  ></atom-select-with-label>
+  <atom-input-with-label
+    formControlName="salary"
+    labelText="Salary"
+    inputType="number"
+    inputId="salary"
+    [isRequired]="false"
+  ></atom-input-with-label>
+  <span class="my-3">Sum</span>
+  <div class="percent">{{ sum$ | async }}$</div>
+  <button type="submit" class="btn btn-primary d-block ms-auto">
+    Calculate
+  </button>
+</form>

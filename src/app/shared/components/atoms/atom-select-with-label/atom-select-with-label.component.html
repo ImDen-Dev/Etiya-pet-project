@@ -1,0 +1,23 @@
+<label [for]="inputId" [class]="labelClasses" *ngIf="labelText !== ''">{{
+  labelText
+}}</label>
+<select
+  [name]="inputId"
+  [attr.id]="inputId"
+  [class]="inputClasses"
+  [required]="isRequired"
+  (blur)="onTouched()"
+  (change)="onSelect($event)"
+>
+  <option *ngIf="disabledSelectedOption !== ''" disabled selected value="">
+    {{ disabledSelectedOption }}
+  </option>
+  <option *ngFor="let option of options" [value]="option.value">
+    {{ option.name }}
+  </option>
+</select>
+<atom-input-errors
+  *ngIf="!control?.valid && control?.touched"
+  [validationErrors]="control?.errors"
+  [fieldText]="labelText"
+></atom-input-errors>

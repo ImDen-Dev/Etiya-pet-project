@@ -1,5 +1,5 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { UserInfoModel } from '../../models/user-info.model';
+import { UserModel } from '../../models/user.model';
 import { Injectable } from '@angular/core';
 import {
   SetDeleteUserInfoAction,
@@ -11,21 +11,20 @@ import {
   DeleteUserAddressAction,
   DeleteUserDefaultAction,
   ResetStateAction,
-} from './users.actions';
+} from './users-table.actions';
 import { UserService } from '../../services/user.service';
-import { tap } from 'rxjs/operators';
 import { FilterUsersAction } from '../search-state/search.actions';
 
-export interface UsersStateModel {
+export interface UsersTableStateModel {
   openUser: number | null;
   edit: {
     userId: number | null;
     addressIndex: number | null;
   };
-  deleteInfo: { userId: number | null; user: UserInfoModel | null };
+  deleteInfo: { userId: number | null; user: UserModel | null };
 }
 
-@State<UsersStateModel>({
+@State<UsersTableStateModel>({
   name: 'users',
   defaults: {
     openUser: null,
@@ -34,16 +33,16 @@ export interface UsersStateModel {
   },
 })
 @Injectable()
-export class UsersState {
+export class UsersTableState {
   constructor(private userService: UserService) {}
 
   @Selector()
-  static getOpenUser({ openUser }: UsersStateModel): number | null {
+  static getOpenUser({ openUser }: UsersTableStateModel): number | null {
     return openUser;
   }
 
   @Selector()
-  static edit({ edit }: UsersStateModel): {
+  static edit({ edit }: UsersTableStateModel): {
     userId: number | null;
     addressIndex: number | null;
   } {
@@ -51,16 +50,16 @@ export class UsersState {
   }
 
   @Selector()
-  static deleteInfo({ deleteInfo }: UsersStateModel): {
+  static deleteInfo({ deleteInfo }: UsersTableStateModel): {
     userId: number | null;
-    user: UserInfoModel | null;
+    user: UserModel | null;
   } {
     return deleteInfo;
   }
 
   @Action(OpenUserAction)
   openUser(
-    { patchState, getState }: StateContext<UsersStateModel>,
+    { patchState, getState }: StateContext<UsersTableStateModel>,
     { userId }: OpenUserAction
   ) {
     patchState({
@@ -70,7 +69,7 @@ export class UsersState {
 
   @Action(EditUserAction)
   editUser(
-    { patchState, getState }: StateContext<UsersStateModel>,
+    { patchState, getState }: StateContext<UsersTableStateModel>,
     { userId, addressIndex }: EditUserAction
   ) {
     patchState({
@@ -78,7 +77,7 @@ export class UsersState {
     });
   }
   @Action(ExitEditUserAction)
-  ExitEditUser({ patchState }: StateContext<UsersStateModel>) {
+  ExitEditUser({ patchState }: StateContext<UsersTableStateModel>) {
     patchState({
       edit: { userId: null, addressIndex: null },
     });
@@ -86,7 +85,7 @@ export class UsersState {
 
   @Action(UpdateUserAction)
   updateUser(
-    { patchState, getState }: StateContext<UsersStateModel>,
+    { patchState, getState }: StateContext<UsersTableStateModel>,
     action: UpdateUserAction
   ) {
     return this.userService.updateUser(action.id, action.user);
@@ -94,7 +93,7 @@ export class UsersState {
 
   @Action(SetDeleteUserInfoAction)
   deleteUserInfo(
-    { patchState }: StateContext<UsersStateModel>,
+    { patchState }: StateContext<UsersTableStateModel>,
     { userId, user }: SetDeleteUserInfoAction
   ) {
     patchState({
@@ -107,7 +106,7 @@ export class UsersState {
     patchState,
     getState,
     dispatch,
-  }: StateContext<UsersStateModel>) {
+  }: StateContext<UsersTableStateModel>) {
     const { deleteInfo } = getState();
     return this.userService
       .deleteUser(deleteInfo.userId as number)
@@ -124,10 +123,10 @@ export class UsersState {
     patchState,
     getState,
     dispatch,
-  }: StateContext<UsersStateModel>) {
+  }: StateContext<UsersTableStateModel>) {
     const { deleteInfo } = getState();
     return this.userService
-      .updateUser(deleteInfo.userId as number, deleteInfo.user as UserInfoModel)
+      .updateUser(deleteInfo.userId as number, deleteInfo.user as UserModel)
       .subscribe(() => {
         patchState({
           deleteInfo: { userId: null, user: null },
@@ -137,14 +136,14 @@ export class UsersState {
   }
 
   @Action(DeleteUserDefaultAction)
-  defaultDelete({ patchState }: StateContext<UsersStateModel>) {
+  defaultDelete({ patchState }: StateContext<UsersTableStateModel>) {
     patchState({
       deleteInfo: { userId: null, user: null },
     });
   }
 
   @Action(ResetStateAction)
-  resetState({ setState }: StateContext<UsersStateModel>) {
+  resetState({ setState }: StateContext<UsersTableStateModel>) {
     setState({
       openUser: null,
       edit: { userId: null, addressIndex: null },
