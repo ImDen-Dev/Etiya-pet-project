@@ -16,7 +16,6 @@ import {
   NgControl,
   ValidationErrors,
 } from '@angular/forms';
-import { AtomInputErrorsComponent } from '../atom-input-errors/atom-input-errors.component';
 
 @Component({
   selector: 'atom-input-with-label',

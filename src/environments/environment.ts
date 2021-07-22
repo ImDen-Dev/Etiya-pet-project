@@ -7,6 +7,7 @@ export const environment = {
   dbUrl: 'https://mini-group-app.herokuapp.com',
   // dbUrl: 'https://tast-attempt-2.herokuapp.com',
   taxUrl: 'https://tax-calculator-1.herokuapp.com',
+  countriesUrl: 'https://restcountries.eu/rest/v2/all?fields=name',
 };
 
 /*

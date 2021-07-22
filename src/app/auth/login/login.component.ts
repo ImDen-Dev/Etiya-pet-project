@@ -9,7 +9,6 @@ import {
   StartLoading,
   StopLoading,
 } from '../../shared/states/ui-state/ui.actions';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -32,10 +31,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.initForm();
   }
 
-  get getLoginFormControls() {
-    return this.loginForm.controls;
-  }
-
   initForm() {
     this.loginForm = this.fb.group({
       email: [null, [Validators.required, Validators.email]],
@@ -45,16 +40,17 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (!this.loginForm.valid) return;
-    this.store
-      .dispatch(new LoginAction(this.loginForm.value))
-      .pipe(tap(() => this.store.dispatch(new StartLoading())))
-      .subscribe(() => {
+    this.store.dispatch(new StartLoading());
+    this.store.dispatch(new LoginAction(this.loginForm.value)).subscribe(
+      () => {
         const isAuth = this.store.selectSnapshot(AuthState.isAuth);
         isAuth
           ? this.router.navigate(['user-info'])
           : this.router.navigate(['create-user']);
         this.store.dispatch(new StopLoading());
-      });
+      },
+      () => this.store.dispatch(new StopLoading())
+    );
   }
 
   ngOnDestroy() {

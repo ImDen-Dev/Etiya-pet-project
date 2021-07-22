@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 
 import { UserModel } from '../models/user.model';
 import { environment } from '../../../environments/environment';
@@ -31,8 +31,6 @@ export class AuthService {
   }
 
   getAllCountries(): Observable<{ name: string }[]> {
-    return this.http.get<{ name: string }[]>(
-      'https://restcountries.eu/rest/v2/all?fields=name'
-    );
+    return this.http.get<{ name: string }[]>(`${environment.countriesUrl}`);
   }
 }

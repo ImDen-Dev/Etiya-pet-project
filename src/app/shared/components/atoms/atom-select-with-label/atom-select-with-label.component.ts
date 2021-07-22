@@ -70,7 +70,6 @@ export class AtomSelectWithLabelComponent
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['optionsValue']) {
-      console.log('Value', this.value);
       this.setOptions();
     }
   }

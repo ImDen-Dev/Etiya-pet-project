@@ -10,6 +10,7 @@ import {
   SetUserInfoAction,
 } from './create-user.actions';
 import { CreateUserAction } from '../auth-state/auth.actions';
+import { StartLoading } from '../ui-state/ui.actions';
 
 export interface CreateUserStateModel {
   userInfo: UserInfoModel;

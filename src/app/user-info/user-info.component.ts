@@ -8,6 +8,11 @@ import {
   ResetCreateUserStateAction,
   SaveUserAction,
 } from '../shared/states/create-user-state/create-user.actions';
+import {
+  StartLoading,
+  StopLoading,
+} from '../shared/states/ui-state/ui.actions';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-info',

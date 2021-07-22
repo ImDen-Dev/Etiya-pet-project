@@ -54,7 +54,7 @@ describe('LoginComponent', () => {
   });
 
   it('should return valid controls', () => {
-    const controls = component.getLoginForm;
+    const controls = component.loginForm.controls;
     expect(controls.email).toBeTruthy();
     expect(controls.password).toBeTruthy();
   });
@@ -62,7 +62,7 @@ describe('LoginComponent', () => {
   it('email field validity', () => {
     let emailErrors;
 
-    const email = component.getLoginForm.email;
+    const email = component.loginForm.controls.email;
     expect(email.valid).toBeFalsy('Invalid form at start');
 
     email.setValue(emptyEmailLoginUser.email);
@@ -84,7 +84,7 @@ describe('LoginComponent', () => {
   it('password field validity', () => {
     let passwordErrors;
 
-    const password = component.getLoginForm.password;
+    const password = component.loginForm.controls.password;
     expect(password.valid).toBeFalsy();
 
     password.setValue(emptyPasswordLoginUser.password);

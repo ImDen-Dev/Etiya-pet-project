@@ -9,7 +9,8 @@ import {
 } from './auth.actions';
 import { AuthService } from '../../services/auth.service';
 import { catchError, switchMap, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
+import { StartLoading, StopLoading } from '../ui-state/ui.actions';
 
 export interface AuthStateModel {
   isAuthenticated: boolean;
@@ -50,9 +51,6 @@ export class AuthState {
     action: LoginAction
   ) {
     return this.authService.login(action.payload).pipe(
-      catchError((err) => {
-        return of({ token: '' });
-      }),
       switchMap((req) => {
         patchState({
           token: req.token,
@@ -71,7 +69,8 @@ export class AuthState {
         const state = getState();
         if (state.isAuthenticated)
           localStorage.setItem('user', JSON.stringify(state));
-      })
+      }),
+      catchError((err) => throwError(err))
     );
   }
 
@@ -98,9 +97,15 @@ export class AuthState {
 
   @Action(CreateUserAction)
   createUser(
-    { patchState }: StateContext<AuthStateModel>,
+    { patchState, dispatch }: StateContext<AuthStateModel>,
     action: CreateUserAction
   ) {
-    return this.authService.createUser(action.payload);
+    dispatch(new StartLoading());
+
+    console.log(action.payload);
+
+    return this.authService
+      .createUser(action.payload)
+      .pipe(tap(() => dispatch(new StopLoading())));
   }
 }

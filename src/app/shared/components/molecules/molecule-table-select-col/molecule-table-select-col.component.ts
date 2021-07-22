@@ -2,21 +2,15 @@ import {
   Component,
   forwardRef,
   Host,
-  Injector,
   Input,
-  OnChanges,
-  OnInit,
   Optional,
-  SimpleChanges,
   SkipSelf,
 } from '@angular/core';
 import {
-  AbstractControl,
   ControlContainer,
   ControlValueAccessor,
   FormControl,
   NG_VALUE_ACCESSOR,
-  NgControl,
 } from '@angular/forms';
 
 @Component({
