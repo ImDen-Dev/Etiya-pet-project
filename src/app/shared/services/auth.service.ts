@@ -4,7 +4,6 @@ import { Observable, throwError } from 'rxjs';
 
 import { UserModel } from '../models/user.model';
 import { environment } from '../../../environments/environment';
-import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -20,17 +19,9 @@ export class AuthService {
     );
   }
 
-  createUser(user: UserModel) {
-    return this.http.post<UserModel>(`${environment.dbUrl}/api/user/new`, user);
-  }
-
   getUser(email: string) {
     return this.http.get<UserModel>(
       `${environment.dbUrl}/api/user?email=${email}`
     );
-  }
-
-  getAllCountries(): Observable<{ name: string }[]> {
-    return this.http.get<{ name: string }[]>(`${environment.countriesUrl}`);
   }
 }

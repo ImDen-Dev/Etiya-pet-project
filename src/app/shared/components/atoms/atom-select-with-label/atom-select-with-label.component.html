@@ -9,10 +9,14 @@
   (blur)="onTouched()"
   (change)="onSelect($event)"
 >
-  <option *ngIf="disabledSelectedOption !== ''" disabled selected value="">
+  <option *ngIf="disabledSelectedOption !== ''" disabled value="">
     {{ disabledSelectedOption }}
   </option>
-  <option *ngFor="let option of options" [value]="option.value">
+  <option
+    *ngFor="let option of options"
+    [selected]="value === option.value"
+    [value]="option.value"
+  >
     {{ option.name }}
   </option>
 </select>

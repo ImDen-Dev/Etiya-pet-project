@@ -1,8 +1,13 @@
-<p class="m-0 text-center" *ngIf="!isEdit">{{ control.value }}</p>
+<p class="m-0 text-center" *ngIf="!isEdit">
+  {{ types[control.value] ? types[control.value] : control.value }}
+</p>
 <atom-select-with-label
   *ngIf="isEdit"
   labelText=""
   [inputId]="controlName"
   [optionsValue]="countries"
   [formControl]="control"
+  [disabledSelectedOption]="
+    countries ? 'Choose Country' : 'Choose address type'
+  "
 ></atom-select-with-label>

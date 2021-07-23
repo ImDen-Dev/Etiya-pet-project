@@ -4,36 +4,35 @@ import { UserInfoModel } from '../../models/userInfoModel';
 import { AddressModel } from '../../models/address.model';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import {
+  GetCountries,
   ResetCreateUserStateAction,
   SaveUserAction,
   SetAddressInfoAction,
   SetUserInfoAction,
 } from './create-user.actions';
-import { CreateUserAction } from '../auth-state/auth.actions';
-import { StartLoading } from '../ui-state/ui.actions';
+import { CreateUserAction } from './create-user.actions';
+import { UserService } from '../../services/user.service';
+import { SelectModel } from '../../models/select.model';
+import { tap } from 'rxjs/operators';
 
 export interface CreateUserStateModel {
   userInfo: UserInfoModel;
   addressInfo: AddressModel[];
+  countries: { name: string }[];
 }
 
 @State<CreateUserStateModel>({
   name: 'CreateUser',
   defaults: {
-    userInfo: {
-      firstName: '',
-      lastName: '',
-      userName: '',
-      email: '',
-      phone: '',
-      password: '',
-      confirmPassword: '',
-    },
+    userInfo: {} as UserModel,
     addressInfo: [],
+    countries: [],
   },
 })
 @Injectable()
 export class CreateUserState {
+  constructor(private userService: UserService) {}
+
   @Selector()
   static getUserInfo({ userInfo }: CreateUserStateModel): UserInfoModel {
     return userInfo;
@@ -48,6 +47,22 @@ export class CreateUserState {
   @Selector()
   static getUser({ userInfo, addressInfo }: CreateUserStateModel): UserModel {
     return { ...userInfo, userAddress: [...addressInfo] };
+  }
+
+  @Selector()
+  static getCountries({ countries }: CreateUserStateModel): SelectModel[] {
+    return countries.map((country) => ({
+      name: country.name,
+      value: country.name,
+    }));
+  }
+
+  @Action(CreateUserAction)
+  createUser(
+    { patchState, dispatch }: StateContext<CreateUserStateModel>,
+    action: CreateUserAction
+  ) {
+    return this.userService.createUser(action.payload);
   }
 
   @Action(SetUserInfoAction)
@@ -79,18 +94,17 @@ export class CreateUserState {
   }
 
   @Action(ResetCreateUserStateAction)
-  resetState({ setState }: StateContext<CreateUserStateModel>) {
-    setState({
-      userInfo: {
-        firstName: '',
-        lastName: '',
-        userName: '',
-        email: '',
-        phone: '',
-        password: '',
-        confirmPassword: '',
-      },
+  resetState({ patchState }: StateContext<CreateUserStateModel>) {
+    patchState({
+      userInfo: {} as UserModel,
       addressInfo: [],
     });
+  }
+
+  @Action(GetCountries)
+  getCountries({ patchState }: StateContext<CreateUserStateModel>) {
+    return this.userService
+      .getAllCountries()
+      .pipe(tap((countries) => patchState({ countries: [...countries] })));
   }
 }

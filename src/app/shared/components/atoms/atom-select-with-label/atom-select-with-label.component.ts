@@ -4,9 +4,6 @@ import {
   Injector,
   Input,
   OnChanges,
-  OnInit,
-  Optional,
-  Self,
   SimpleChanges,
 } from '@angular/core';
 import {
@@ -15,7 +12,6 @@ import {
   NG_VALUE_ACCESSOR,
   NgControl,
 } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'atom-select-with-label',
@@ -63,7 +59,6 @@ export class AtomSelectWithLabelComponent
 
   onChange!: (_: any) => void;
   onTouched!: () => void;
-
   value = '';
 
   constructor(private _injector: Injector) {}

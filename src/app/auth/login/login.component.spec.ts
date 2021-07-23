@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { NgxsModule, Store } from '@ngxs/store';
 import { AuthState } from '../../shared/states/auth-state/auth.state';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { LoginAction } from '../../shared/states/auth-state/auth.actions';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -94,13 +93,5 @@ describe('LoginComponent', () => {
     password.setValue(validLoginUser.password);
     passwordErrors = password.errors || {};
     expect(passwordErrors['required']).toBeFalsy();
-  });
-
-  it('should be', () => {
-    component.onSubmit();
-    store.dispatch(new LoginAction({ email: '', password: '' }));
-    fixture.detectChanges();
-
-    console.log((router.navigate as jasmine.Spy).calls);
   });
 });

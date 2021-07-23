@@ -21,6 +21,8 @@ import {
 } from '../../../shared/states/users-table-state/users-table.actions';
 import { SearchState } from '../../../shared/states/search-state/search.state';
 import { SortAction } from '../../../shared/states/search-state/search.actions';
+import { CreateUserState } from '../../../shared/states/create-user-state/create-user.state';
+import { SelectModel } from '../../../shared/models/select.model';
 
 @Component({
   selector: 'app-users-list',
@@ -31,7 +33,6 @@ export class UsersListComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   forms!: FormGroup;
   users!: UserModel[];
-  countries!: { name: string }[];
   isShowPopup = false;
   sortOrder = '';
   sortBy = '';
@@ -50,10 +51,9 @@ export class UsersListComponent implements OnInit, OnDestroy {
     userId: number | null;
     addressIndex: number | null;
   }>;
-
+  @Select(CreateUserState.getCountries) countries$!: Observable<SelectModel[]>;
   ngOnInit(): void {
     this.getUsers();
-    this.getCountries();
   }
 
   initForm() {
@@ -70,14 +70,6 @@ export class UsersListComponent implements OnInit, OnDestroy {
       }
     });
     this.subscriptions.push(usersSub);
-  }
-
-  getCountries() {
-    const countriesSub = this.authService.getAllCountries().subscribe(
-      (countries) => (this.countries = countries),
-      (error) => console.log(error)
-    );
-    this.subscriptions.push(countriesSub);
   }
 
   get getFoundUsers(): FormArray {

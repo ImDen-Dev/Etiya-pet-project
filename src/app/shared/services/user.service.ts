@@ -7,12 +7,12 @@ import { tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  foundUsers = new BehaviorSubject<UserModel[]>([]);
   constructor(private http: HttpClient) {}
 
-  findUsers(): Observable<UserModel[]> {
-    return this.http.get<UserModel[]>(`${environment.dbUrl}/api/user/all`);
-  }
+  // TODO Fix
+  // findUsers(): Observable<UserModel[]> {
+  //   return this.http.get<UserModel[]>(`${environment.dbUrl}/api/user/all`);
+  // }
 
   deleteUser(id: number) {
     return this.http.delete(`${environment.dbUrl}/api/user/${id}`);
@@ -23,5 +23,13 @@ export class UserService {
       `${environment.dbUrl}/api/user/${id}`,
       body
     );
+  }
+
+  createUser(user: UserModel) {
+    return this.http.post<UserModel>(`${environment.dbUrl}/api/user/new`, user);
+  }
+
+  getAllCountries(): Observable<{ name: string }[]> {
+    return this.http.get<{ name: string }[]>(`${environment.countriesUrl}`);
   }
 }

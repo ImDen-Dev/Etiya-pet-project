@@ -2,12 +2,15 @@ import { Component, Input, OnInit } from '@angular/core';
 import { UserModel } from '../../../models/user.model';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddressModel } from '../../../models/address.model';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import {
   SetDeleteUserInfoAction,
   UpdateUserAction,
 } from '../../../states/users-table-state/users-table.actions';
 import { AuthService } from '../../../services/auth.service';
+import { CreateUserState } from '../../../states/create-user-state/create-user.state';
+import { Observable } from 'rxjs';
+import { SelectModel } from '../../../models/select.model';
 
 @Component({
   selector: 'organism-table-row',
@@ -20,7 +23,6 @@ export class OrganismTableRowComponent implements OnInit {
   isEdit!: number | boolean;
   form!: FormGroup;
   delete: boolean = false;
-  countries!: any;
   isAddress = false;
   constructor(
     private fb: FormBuilder,
@@ -28,15 +30,10 @@ export class OrganismTableRowComponent implements OnInit {
     private auth: AuthService
   ) {}
 
+  @Select(CreateUserState.getCountries) countries$!: Observable<SelectModel[]>;
+
   ngOnInit(): void {
     this.initForm();
-    this.getCountries();
-  }
-
-  getCountries() {
-    this.auth
-      .getAllCountries()
-      .subscribe((countries) => (this.countries = countries));
   }
 
   get userAddresses() {

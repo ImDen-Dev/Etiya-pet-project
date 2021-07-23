@@ -17,9 +17,3 @@ export class LoggedUser {
   static readonly type = '[Auth] Logged User';
   constructor(public payload: AuthStateModel) {}
 }
-
-export class CreateUserAction {
-  static readonly desc = 'Create new User';
-  static readonly type = '[Auth] Create User';
-  constructor(public payload: UserModel) {}
-}

@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { CreateUserState } from '../../shared/states/create-user-state/create-user.state';
 import { AddressModel } from '../../shared/models/address.model';
 import { SetAddressInfoAction } from '../../shared/states/create-user-state/create-user.actions';
+import { Observable } from 'rxjs';
+import { SelectModel } from '../../shared/models/select.model';
 
 @Component({
   selector: 'app-address-info-form',
@@ -14,7 +16,6 @@ import { SetAddressInfoAction } from '../../shared/states/create-user-state/crea
 })
 export class AddressInfoFormComponent implements OnInit {
   addressInfo!: FormGroup;
-  countries: { name: string }[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -24,21 +25,16 @@ export class AddressInfoFormComponent implements OnInit {
     private store: Store
   ) {}
 
+  @Select(CreateUserState.getCountries) countries$!: Observable<SelectModel[]>;
+
   ngOnInit(): void {
     this.initAddressInfoForm();
-    this.getCountries();
     const userAddresses = this.store.selectSnapshot(
       CreateUserState.getUserAddressInfo
     );
     userAddresses.length > 0
       ? userAddresses.forEach((address) => this.addAddressGroup(address))
       : this.addAddressGroup();
-  }
-
-  getCountries(): void {
-    this.authService
-      .getAllCountries()
-      .subscribe((data) => (this.countries = data));
   }
 
   initAddressInfoForm() {

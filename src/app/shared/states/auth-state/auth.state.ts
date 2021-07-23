@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { UserModel } from '../../models/user.model';
-import {
-  CreateUserAction,
-  LoggedUser,
-  LoginAction,
-  LogoutAction,
-} from './auth.actions';
+import { LoggedUser, LoginAction, LogoutAction } from './auth.actions';
 import { AuthService } from '../../services/auth.service';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { of, throwError } from 'rxjs';
-import { StartLoading, StopLoading } from '../ui-state/ui.actions';
 
 export interface AuthStateModel {
   isAuthenticated: boolean;
@@ -93,19 +87,5 @@ export class AuthState {
       user: null,
     });
     localStorage.removeItem('user');
-  }
-
-  @Action(CreateUserAction)
-  createUser(
-    { patchState, dispatch }: StateContext<AuthStateModel>,
-    action: CreateUserAction
-  ) {
-    dispatch(new StartLoading());
-
-    console.log(action.payload);
-
-    return this.authService
-      .createUser(action.payload)
-      .pipe(tap(() => dispatch(new StopLoading())));
   }
 }

@@ -43,7 +43,7 @@
           formControlName="country"
           labelText="Country"
           disabledSelectedOption="Choose country"
-          [optionsValue]="countries"
+          [optionsValue]="countries$ | async"
         ></atom-select-with-label>
       </div>
       <div class="col-12">

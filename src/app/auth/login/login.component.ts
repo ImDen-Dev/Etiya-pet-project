@@ -5,10 +5,6 @@ import { Store } from '@ngxs/store';
 import { LoginAction } from '../../shared/states/auth-state/auth.actions';
 import { AuthState } from '../../shared/states/auth-state/auth.state';
 import { Subscription } from 'rxjs';
-import {
-  StartLoading,
-  StopLoading,
-} from '../../shared/states/ui-state/ui.actions';
 
 @Component({
   selector: 'app-login',
@@ -40,17 +36,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (!this.loginForm.valid) return;
-    this.store.dispatch(new StartLoading());
-    this.store.dispatch(new LoginAction(this.loginForm.value)).subscribe(
-      () => {
-        const isAuth = this.store.selectSnapshot(AuthState.isAuth);
-        isAuth
-          ? this.router.navigate(['user-info'])
-          : this.router.navigate(['create-user']);
-        this.store.dispatch(new StopLoading());
-      },
-      () => this.store.dispatch(new StopLoading())
-    );
+    this.store.dispatch(new LoginAction(this.loginForm.value)).subscribe(() => {
+      const isAuth = this.store.selectSnapshot(AuthState.isAuth);
+      isAuth
+        ? this.router.navigate(['user-info'])
+        : this.router.navigate(['create-user']);
+    });
   }
 
   ngOnDestroy() {

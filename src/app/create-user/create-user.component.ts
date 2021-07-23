@@ -5,7 +5,6 @@ import { AuthService } from '../shared/services/auth.service';
 import { AddressModel } from '../shared/models/address.model';
 import { Router, RouterOutlet } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { CreateUserAction } from '../shared/states/auth-state/auth.actions';
 import { AuthState } from '../shared/states/auth-state/auth.state';
 import {
   StartLoading,
@@ -14,6 +13,7 @@ import {
 import { tap } from 'rxjs/operators';
 import { UserModel } from '../shared/models/user.model';
 import { slideInAnimation } from './router.animation';
+import { CreateUserAction } from '../shared/states/create-user-state/create-user.actions';
 
 @Component({
   selector: 'app-create-user',

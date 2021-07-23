@@ -12,6 +12,8 @@ import {
   FormControl,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
+import { SelectModel } from '../../../models/select.model';
+import { AddressTypes } from '../../../addressTypes';
 
 @Component({
   selector: 'molecule-table-select-col',
@@ -29,7 +31,9 @@ export class MoleculeTableSelectColComponent implements ControlValueAccessor {
   @Input() isEdit = false;
   @Input() inputType!: string;
   @Input() controlName!: string;
-  @Input() countries!: any;
+  @Input() countries!: SelectModel[] | null;
+
+  types: { [name: string]: string } = AddressTypes;
 
   onChange!: (_: any) => void;
   onTouched!: () => void;
@@ -41,7 +45,9 @@ export class MoleculeTableSelectColComponent implements ControlValueAccessor {
     @Host()
     @SkipSelf()
     private controlContainer: ControlContainer
-  ) {}
+  ) {
+    console.log(typeof this.types);
+  }
 
   get control(): FormControl {
     return this.controlContainer.control?.get(this.controlName) as FormControl;

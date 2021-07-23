@@ -1,6 +1,7 @@
 import {
   Directive,
   ElementRef,
+  HostBinding,
   HostListener,
   Input,
   Renderer2,
@@ -11,8 +12,10 @@ export class TableCollapseDirective {
   isOpen = false;
 
   constructor(private el: ElementRef, private renderer: Renderer2) {}
-
-  @HostListener('click', ['$event.target']) onClick(target: HTMLElement) {
+  @HostBinding('style.cursor') cursor = 'pointer';
+  @HostBinding('style.userSelect') userSelect = 'none';
+  @HostListener('click', ['$event.target'])
+  onClick(target: HTMLElement) {
     if (target.tagName === 'BUTTON' || target.tagName === 'INPUT') {
       return;
     }
