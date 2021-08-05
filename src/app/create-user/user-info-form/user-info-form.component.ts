@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
@@ -26,24 +26,23 @@ export class UserInfoFormComponent implements OnInit {
   ) {}
 
   initMainInfoForm() {
-    const user = this.store.selectSnapshot(CreateUserState.getUserInfo);
-    this.userInfo = user ? user : this.userInfo;
+    this.userInfo = this.store.selectSnapshot(CreateUserState.getUserInfo);
     this.mainInfo = this.fb.group(
       {
         firstName: [
-          this.userInfo.firstName,
+          this.userInfo?.firstName,
           [Validators.required, Validators.minLength(3)],
         ],
         lastName: [
-          this.userInfo.lastName,
+          this.userInfo?.lastName,
           [Validators.required, Validators.minLength(3)],
         ],
         userName: [
-          this.userInfo.userName,
+          this.userInfo?.userName,
           [Validators.required, Validators.minLength(3)],
         ],
         phone: [
-          this.userInfo.phone,
+          this.userInfo?.phone,
           [
             Validators.required,
             Validators.pattern(/[-+()0-9]/g),
@@ -51,12 +50,12 @@ export class UserInfoFormComponent implements OnInit {
             Validators.maxLength(17),
           ],
         ],
-        email: [this.userInfo.email, [Validators.required, Validators.email]],
+        email: [this.userInfo?.email, [Validators.required, Validators.email]],
         password: [
-          this.userInfo.password,
+          this.userInfo?.password,
           [Validators.required, Validators.minLength(6)],
         ],
-        confirmPassword: [this.userInfo.confirmPassword, Validators.required],
+        confirmPassword: [this.userInfo?.confirmPassword, Validators.required],
       },
       { validators: this.mustMatch('password', 'confirmPassword') }
     );

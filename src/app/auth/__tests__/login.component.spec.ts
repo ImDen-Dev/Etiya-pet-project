@@ -74,9 +74,6 @@ describe('LoginComponent', () => {
   });
 
   it('onInit should navigate to "user-info" if auth', () => {
-    // store.selectSnapshot.and.returnValue(true);
-
-    // expect(spyOn(component, 'ngOnInit')).toHaveBeenCalled();
     expect(store.selectSnapshot).toHaveBeenCalledWith(AuthState.isAuth);
     expect(store.selectSnapshot.calls.count()).toBe(1);
     expect(router.navigate).toHaveBeenCalled();
@@ -129,7 +126,7 @@ describe('LoginComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['user-info']);
   });
 
-  it('on Submit should navigate to "user-info" if auth invalid', () => {
+  it('on Submit should navigate to "create-user" if auth invalid', () => {
     store.dispatch.and.returnValue(of(() => {}));
     store.selectSnapshot.and.returnValue(false);
     setFormValue();
