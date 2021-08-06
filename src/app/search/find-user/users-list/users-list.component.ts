@@ -4,21 +4,10 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../../shared/services/user.service';
 import { UserModel } from '../../../shared/models/user.model';
 import { AddressModel } from '../../../shared/models/address.model';
-import { AuthService } from '../../../shared/services/auth.service';
 import { Observable, Subscription } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { AuthState } from '../../../shared/states/auth-state/auth.state';
 import { UsersTableState } from '../../../shared/states/users-table-state/users-table.state';
-import {
-  DeleteUserAction,
-  DeleteUserAddressAction,
-  DeleteUserDefaultAction,
-  EditUserAction,
-  ExitEditUserAction,
-  OpenUserAction,
-  SetDeleteUserInfoAction,
-  UpdateUserAction,
-} from '../../../shared/states/users-table-state/users-table.actions';
 import { SearchState } from '../../../shared/states/search-state/search.state';
 import { SortAction } from '../../../shared/states/search-state/search.actions';
 import { CreateUserState } from '../../../shared/states/create-user-state/create-user.state';
@@ -33,13 +22,11 @@ export class UsersListComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   forms!: FormGroup;
   users!: UserModel[];
-  isShowPopup = false;
   sortOrder = '';
   sortBy = '';
   constructor(
     private userService: UserService,
     private fb: FormBuilder,
-    public authService: AuthService,
     private store: Store
   ) {}
 
@@ -78,10 +65,6 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
   getUserAddresses(index: number): FormArray {
     return this.getFoundUsers.at(index).get('userAddress') as FormArray;
-  }
-
-  getUserAddressControls(userIndex: number, addressIndex: number) {
-    return this.getUserAddresses(userIndex).at(addressIndex);
   }
 
   addUserToForm(users: UserModel[]) {
@@ -133,95 +116,6 @@ export class UsersListComponent implements OnInit, OnDestroy {
       password: [user.password],
       userAddress: this.fb.array([]),
     });
-  }
-
-  openUser(userId: number) {
-    this.store.dispatch(new OpenUserAction(userId));
-  }
-
-  onDelete(id: number, userIndex: number, addressIndex: number | null) {
-    this.isShowPopup = true;
-
-    if (addressIndex !== null) {
-      const userValue: UserModel = this.getFoundUsers.at(userIndex).value;
-      userValue.userAddress.splice(addressIndex, addressIndex + 1);
-      this.store.dispatch(new SetDeleteUserInfoAction(id, userValue));
-    } else {
-      this.store.dispatch(new SetDeleteUserInfoAction(id, null));
-    }
-  }
-
-  removeAddressFromForm(userIndex: number, addressIndex: number) {
-    (this.getFoundUsers.at(userIndex).get('userAddress') as FormArray).removeAt(
-      addressIndex
-    );
-  }
-
-  delete() {
-    const { user } = this.store.selectSnapshot(UsersTableState.deleteInfo);
-    if (!user) {
-      this.store.dispatch(new DeleteUserAction());
-    } else {
-      this.store.dispatch(new DeleteUserAddressAction());
-    }
-    this.isShowPopup = false;
-  }
-
-  onCancelDelete() {
-    this.isShowPopup = false;
-    this.store.dispatch(new DeleteUserDefaultAction());
-  }
-
-  onAddNewAddressField(userIndex: number) {
-    (this.getFoundUsers.at(userIndex).get('userAddress') as FormArray).push(
-      this.fb.group({
-        addressType: [null, Validators.required],
-        address: [null, Validators.required],
-        city: [null, Validators.required],
-        country: [null, Validators.required],
-        postalCode: [null, [Validators.required, Validators.pattern(/[0-9]/g)]],
-      })
-    );
-    const addressIndex = this.getUserAddresses(userIndex).length - 1;
-    this.onEditUserAddress(userIndex, addressIndex);
-  }
-
-  onSave(id: number, userIndex: number) {
-    const body = this.getFoundUsers.at(userIndex).value;
-    const addUserAddressSub = this.store
-      .dispatch(new UpdateUserAction(id, body))
-      .subscribe(
-        () => {
-          this.exitEditMode();
-        },
-        (error) => console.log(error)
-      );
-    this.subscriptions.push(addUserAddressSub);
-  }
-
-  onEditUserAddress(userIndex: number, addressIndex: number) {
-    this.onEdit(this.users[userIndex].id as number, addressIndex);
-  }
-
-  onEdit(userId: number, addressIndex: number | null) {
-    this.getFoundUsers.patchValue(this.users);
-    this.store.dispatch(new EditUserAction(userId, addressIndex));
-  }
-
-  exitEditMode() {
-    this.store.dispatch(new ExitEditUserAction());
-  }
-
-  onCancel(userIndex: number, addressIndex?: number) {
-    if (addressIndex) {
-      if (this.getUserAddressControls(userIndex, addressIndex).invalid) {
-        this.removeAddressFromForm(userIndex, addressIndex);
-      }
-    }
-
-    this.getFoundUsers.at(userIndex).patchValue(this.users[userIndex]);
-    this.exitEditMode();
-    this.store.dispatch(new DeleteUserDefaultAction());
   }
 
   sort(sortBy: string) {
