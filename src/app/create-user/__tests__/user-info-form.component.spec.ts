@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { UserInfoFormComponent } from './user-info-form.component';
+import { UserInfoFormComponent } from '../user-info-form/user-info-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
@@ -124,7 +124,6 @@ describe('UserInfoFormComponent', () => {
       By.css('button[type=submit]')
     ).nativeElement;
     store.dispatch.and.returnValue(of(true));
-    router.navigate.and.callThrough();
     const onSubmitSpy = spyOn(component, 'onSubmit').and.callThrough();
 
     fixture.detectChanges();

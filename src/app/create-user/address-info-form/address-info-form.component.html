@@ -16,7 +16,7 @@
       <hr />
       <div class="col-12">
         <atom-select-with-label
-          inputId="{{ i }}"
+          inputId="address-type-{{ i }}"
           formControlName="addressType"
           labelText="Address type"
         ></atom-select-with-label>
@@ -24,7 +24,7 @@
       <div class="col-12">
         <atom-input-with-label
           labelText="Address"
-          inputId="address"
+          inputId="address-{{i}}"
           inputType="text"
           formControlName="address"
         ></atom-input-with-label>
@@ -32,14 +32,14 @@
       <div class="col-6">
         <atom-input-with-label
           labelText="City"
-          inputId="city"
+          inputId="city-{{i}}"
           inputType="text"
           formControlName="city"
         ></atom-input-with-label>
       </div>
       <div class="col-6">
         <atom-select-with-label
-          inputId="country"
+          inputId="country-{{i}}"
           formControlName="country"
           labelText="Country"
           disabledSelectedOption="Choose country"
@@ -49,7 +49,7 @@
       <div class="col-12">
         <atom-input-with-label
           labelText="Postal code"
-          inputId="postalCode"
+          inputId="postalCode-{{i}}"
           inputType="text"
           formControlName="postalCode"
         ></atom-input-with-label>

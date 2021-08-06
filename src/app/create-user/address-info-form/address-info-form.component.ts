@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../../shared/services/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { CreateUserState } from '../../shared/states/create-user-state/create-user.state';
 import { AddressModel } from '../../shared/models/address.model';
@@ -19,9 +18,7 @@ export class AddressInfoFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute,
     private store: Store
   ) {}
 
@@ -32,7 +29,7 @@ export class AddressInfoFormComponent implements OnInit {
     const userAddresses = this.store.selectSnapshot(
       CreateUserState.getUserAddressInfo
     );
-    userAddresses.length > 0
+    userAddresses?.length > 0
       ? userAddresses.forEach((address) => this.addAddressGroup(address))
       : this.addAddressGroup();
   }
@@ -66,10 +63,6 @@ export class AddressInfoFormComponent implements OnInit {
 
   get getAddressInfoArray() {
     return this.addressInfo.get('userAddress') as FormArray;
-  }
-
-  get getAddressControls() {
-    return (this.addressInfo.get('userAddress') as FormArray).controls;
   }
 
   deleteAddressControl(i: number) {
